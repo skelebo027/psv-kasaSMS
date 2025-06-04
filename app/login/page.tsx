@@ -24,12 +24,31 @@ export default function LoginPage() {
     e.preventDefault()
     setIsLoading(true)
 
-    // Simulate login process
-    setTimeout(() => {
-      setIsLoading(false)
-      // Redirect to dashboard on successful login
+    try {
+      // Simulate login API call
+      await new Promise((resolve) => setTimeout(resolve, 1500))
+
+      // Mock successful login - in real app, this would come from your API
+      const mockToken = "mock_jwt_token_" + Date.now()
+      const mockUser = {
+        id: "1",
+        email: formData.email,
+        name: "John Doe",
+        role: "user",
+      }
+
+      // Store authentication data
+      localStorage.setItem("kasasms_token", mockToken)
+      localStorage.setItem("kasasms_user", JSON.stringify(mockUser))
+
+      // Redirect to dashboard
       window.location.href = "/dashboard"
-    }, 2000)
+    } catch (error) {
+      console.error("Login failed:", error)
+      // Handle login error here
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {

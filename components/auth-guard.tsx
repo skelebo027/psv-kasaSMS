@@ -1,32 +1,41 @@
 "use client"
 
+import type React from "react"
+
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { MessageSquare } from "lucide-react"
 
-export default function Home() {
+interface AuthGuardProps {
+  children: React.ReactNode
+  requireAuth?: boolean
+}
+
+export function AuthGuard({ children, requireAuth = true }: AuthGuardProps) {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
   const router = useRouter()
 
   useEffect(() => {
-    // Check authentication status
     const checkAuth = () => {
       const token = localStorage.getItem("kasasms_token")
       const user = localStorage.getItem("kasasms_user")
-      
-      if (token && user) {
-        setIsAuthenticated(true)
-      } else {
-        setIsAuthenticated(false)
+
+      const authenticated = !!(token && user)
+      setIsAuthenticated(authenticated)
+      setIsLoading(false)
+
+      if (requireAuth && !authenticated) {
         router.push("/login")
+      } else if (!requireAuth && authenticated) {
+        router.push("/dashboard")
       }
     }
 
     checkAuth()
-  }, [router])
+  }, [router, requireAuth])
 
-  // Show loading while checking authentication
-  if (isAuthenticated === null) {
+  if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-white to-orange-50">
         <div className="text-center">
@@ -40,13 +49,13 @@ export default function Home() {
     )
   }
 
-  // If not authenticated, this won't render as we redirect to login
-  if (!isAuthenticated) {
-    return null
+  if (requireAuth && !isAuthenticated) {
+    return null // Will redirect to login
   }
 
-  // Authenticated users see the main dashboard/home content
-  return (
-    <div className="flex min-h-screen flex-col">
-      <header className="sticky top-0 z-50 w-full border-b bg-white">
-        <div className="container flex h-16 items-center justify-between py-4\">
+  if (!requireAuth && isAuthenticated) {
+    return null // Will redirect to dashboard
+  }
+
+  return <>{children}</>
+}
