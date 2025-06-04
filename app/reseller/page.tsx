@@ -1,0 +1,468 @@
+"use client"
+
+import { useState } from "react"
+import Link from "next/link"
+import {
+  BarChart3,
+  Bell,
+  Briefcase,
+  CreditCard,
+  Globe,
+  MessageSquare,
+  Palette,
+  Percent,
+  PlusCircle,
+  Settings,
+  Users,
+} from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { UserNav } from "@/components/user-nav"
+import { ResellerNav } from "@/components/reseller-nav"
+
+export default function ResellerDashboard() {
+  const [activeTab, setActiveTab] = useState("overview")
+
+  return (
+    <div className="flex min-h-screen flex-col">
+      <div className="border-b">
+        <div className="flex h-16 items-center px-4">
+          <div className="flex items-center gap-2 mr-4">
+            <MessageSquare className="h-6 w-6 text-purple-500" />
+            <span className="text-xl font-bold text-purple-500">YourBrandSMS</span>
+            <div className="bg-purple-100 text-purple-800 px-2 py-1 rounded text-xs font-medium">Reseller Portal</div>
+          </div>
+          <ResellerNav className="mx-6" />
+          <div className="ml-auto flex items-center space-x-4">
+            <Button variant="outline" size="sm">
+              <PlusCircle className="mr-2 h-4 w-4" />
+              Add Credits
+            </Button>
+            <Bell className="h-5 w-5 cursor-pointer" />
+            <UserNav />
+          </div>
+        </div>
+      </div>
+      <div className="grid flex-1 md:grid-cols-[220px_1fr]">
+        <aside className="hidden border-r bg-gray-50 md:block">
+          <div className="flex h-full flex-col gap-2 p-4">
+            <Link href="/reseller">
+              <Button variant="ghost" className="w-full justify-start gap-2">
+                <BarChart3 className="h-5 w-5" />
+                Dashboard
+              </Button>
+            </Link>
+            <Link href="/reseller/clients">
+              <Button variant="ghost" className="w-full justify-start gap-2">
+                <Users className="h-5 w-5" />
+                Clients
+              </Button>
+            </Link>
+            <Link href="/reseller/services">
+              <Button variant="ghost" className="w-full justify-start gap-2">
+                <MessageSquare className="h-5 w-5" />
+                Services
+              </Button>
+            </Link>
+            <Link href="/reseller/pricing">
+              <Button variant="ghost" className="w-full justify-start gap-2">
+                <Percent className="h-5 w-5" />
+                Pricing
+              </Button>
+            </Link>
+            <Link href="/reseller/branding">
+              <Button variant="ghost" className="w-full justify-start gap-2">
+                <Palette className="h-5 w-5" />
+                Branding
+              </Button>
+            </Link>
+            <Link href="/reseller/domain">
+              <Button variant="ghost" className="w-full justify-start gap-2">
+                <Globe className="h-5 w-5" />
+                Domain
+              </Button>
+            </Link>
+            <Link href="/reseller/billing">
+              <Button variant="ghost" className="w-full justify-start gap-2">
+                <CreditCard className="h-5 w-5" />
+                Billing
+              </Button>
+            </Link>
+            <Link href="/reseller/settings">
+              <Button variant="ghost" className="w-full justify-start gap-2">
+                <Settings className="h-5 w-5" />
+                Settings
+              </Button>
+            </Link>
+          </div>
+        </aside>
+        <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
+          <div className="flex items-center justify-between">
+            <h1 className="text-2xl font-bold">Reseller Dashboard</h1>
+            <Tabs defaultValue="overview" className="w-[400px]" onValueChange={setActiveTab}>
+              <TabsList>
+                <TabsTrigger value="overview">Overview</TabsTrigger>
+                <TabsTrigger value="clients">Clients</TabsTrigger>
+                <TabsTrigger value="revenue">Revenue</TabsTrigger>
+              </TabsList>
+            </Tabs>
+          </div>
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
+                <CreditCard className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">$12,450</div>
+                <p className="text-xs text-muted-foreground">+18% from last month</p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Active Clients</CardTitle>
+                <Users className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">24</div>
+                <p className="text-xs text-muted-foreground">+3 from last month</p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Messages Sent</CardTitle>
+                <MessageSquare className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">45,231</div>
+                <p className="text-xs text-muted-foreground">+12% from last month</p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Commission</CardTitle>
+                <Briefcase className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">$3,735</div>
+                <p className="text-xs text-muted-foreground">+18% from last month</p>
+              </CardContent>
+            </Card>
+          </div>
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+            <Card className="col-span-4">
+              <CardHeader>
+                <CardTitle>Monthly Revenue</CardTitle>
+                <CardDescription>Your revenue and commission over time</CardDescription>
+              </CardHeader>
+              <CardContent className="pl-2">
+                <div className="h-[300px] w-full">
+                  {/* Placeholder for chart */}
+                  <div className="flex h-full w-full items-center justify-center rounded-md border border-dashed">
+                    <div className="flex flex-col items-center gap-2 text-center">
+                      <BarChart3 className="h-8 w-8 text-muted-foreground" />
+                      <div className="text-sm text-muted-foreground">Revenue chart will appear here</div>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+            <Card className="col-span-3">
+              <CardHeader>
+                <CardTitle>Recent Clients</CardTitle>
+                <CardDescription>You added 3 new clients this month</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="flex items-center">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-purple-100">
+                      <Users className="h-5 w-5 text-purple-700" />
+                    </div>
+                    <div className="ml-4 space-y-1">
+                      <p className="text-sm font-medium leading-none">TechSolutions Inc.</p>
+                      <p className="text-sm text-muted-foreground">Added on May 12, 2025</p>
+                    </div>
+                    <div className="ml-auto font-medium">$1,250</div>
+                  </div>
+                  <div className="flex items-center">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-purple-100">
+                      <Users className="h-5 w-5 text-purple-700" />
+                    </div>
+                    <div className="ml-4 space-y-1">
+                      <p className="text-sm font-medium leading-none">Global Marketing Ltd.</p>
+                      <p className="text-sm text-muted-foreground">Added on May 8, 2025</p>
+                    </div>
+                    <div className="ml-auto font-medium">$890</div>
+                  </div>
+                  <div className="flex items-center">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-purple-100">
+                      <Users className="h-5 w-5 text-purple-700" />
+                    </div>
+                    <div className="ml-4 space-y-1">
+                      <p className="text-sm font-medium leading-none">Retail Connect</p>
+                      <p className="text-sm text-muted-foreground">Added on May 4, 2025</p>
+                    </div>
+                    <div className="ml-auto font-medium">$650</div>
+                  </div>
+                  <div className="flex items-center">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-purple-100">
+                      <Users className="h-5 w-5 text-purple-700" />
+                    </div>
+                    <div className="ml-4 space-y-1">
+                      <p className="text-sm font-medium leading-none">Health Services</p>
+                      <p className="text-sm text-muted-foreground">Added on Apr 28, 2025</p>
+                    </div>
+                    <div className="ml-auto font-medium">$1,120</div>
+                  </div>
+                  <div className="flex items-center">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-purple-100">
+                      <Users className="h-5 w-5 text-purple-700" />
+                    </div>
+                    <div className="ml-4 space-y-1">
+                      <p className="text-sm font-medium leading-none">Education First</p>
+                      <p className="text-sm text-muted-foreground">Added on Apr 15, 2025</p>
+                    </div>
+                    <div className="ml-auto font-medium">$780</div>
+                  </div>
+                </div>
+              </CardContent>
+              <CardFooter>
+                <Button variant="outline" className="w-full">
+                  View All Clients
+                </Button>
+              </CardFooter>
+            </Card>
+          </div>
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            <Card>
+              <CardHeader>
+                <CardTitle>Quick Actions</CardTitle>
+              </CardHeader>
+              <CardContent className="grid gap-2">
+                <Button className="w-full bg-purple-500 hover:bg-purple-600">
+                  <Users className="mr-2 h-4 w-4" />
+                  Add New Client
+                </Button>
+                <Button variant="outline" className="w-full">
+                  <MessageSquare className="mr-2 h-4 w-4" />
+                  Create Campaign
+                </Button>
+                <Button variant="outline" className="w-full">
+                  <CreditCard className="mr-2 h-4 w-4" />
+                  Purchase Credits
+                </Button>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle>Service Status</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <MessageSquare className="h-5 w-5 text-purple-500" />
+                    <span>SMS Service</span>
+                  </div>
+                  <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">
+                    Active
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="h-5 w-5 text-teal-500"
+                    >
+                      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                    </svg>
+                    <span>Voice Service</span>
+                  </div>
+                  <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">
+                    Active
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="h-5 w-5 text-blue-500"
+                    >
+                      <rect width="20" height="16" x="2" y="4" rx="2" />
+                      <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                    </svg>
+                    <span>Email Service</span>
+                  </div>
+                  <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">
+                    Active
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="h-5 w-5 text-green-500"
+                    >
+                      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                    </svg>
+                    <span>WhatsApp Service</span>
+                  </div>
+                  <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">
+                    Active
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="h-5 w-5 text-yellow-500"
+                    >
+                      <path d="M3.5 5.5 7 3.5l3.5 2 3.5-2 3.5 2v12.5l-3.5 2-3.5-2-3.5 2-3.5-2z" />
+                      <path d="M7 3.5v12.5" />
+                      <path d="M14 5.5v12.5" />
+                      <path d="M3.5 18V5.5" />
+                      <path d="M17.5 18V5.5" />
+                    </svg>
+                    <span>USSD Service</span>
+                  </div>
+                  <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">
+                    Active
+                  </span>
+                </div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle>Reseller Plan</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="rounded-md border p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="font-medium">Enterprise Reseller</p>
+                      <p className="text-sm text-muted-foreground">Unlimited clients</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="font-medium">$499/month</p>
+                      <p className="text-sm text-muted-foreground">Next billing: May 28, 2025</p>
+                    </div>
+                  </div>
+                  <div className="mt-4">
+                    <p className="text-sm font-medium">Features:</p>
+                    <ul className="mt-2 space-y-1 text-sm">
+                      <li className="flex items-center">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="mr-2 h-4 w-4 text-green-500"
+                        >
+                          <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        Full white-label capabilities
+                      </li>
+                      <li className="flex items-center">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="mr-2 h-4 w-4 text-green-500"
+                        >
+                          <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        Custom domain
+                      </li>
+                      <li className="flex items-center">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="mr-2 h-4 w-4 text-green-500"
+                        >
+                          <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        30% commission on all sales
+                      </li>
+                      <li className="flex items-center">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="mr-2 h-4 w-4 text-green-500"
+                        >
+                          <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        Priority support
+                      </li>
+                    </ul>
+                  </div>
+                  <div className="mt-4 flex justify-end">
+                    <Button variant="outline" size="sm">
+                      Upgrade Plan
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </main>
+      </div>
+    </div>
+  )
+}
