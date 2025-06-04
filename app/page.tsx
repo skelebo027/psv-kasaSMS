@@ -8,7 +8,7 @@ const HomePage = () => {
         <div className="bg-white rounded-lg shadow-md p-6">
           <h2 className="text-xl font-semibold mb-4">Starter</h2>
           <p className="text-gray-600 mb-4">Ideal for individuals and small teams getting started.</p>
-          <div className="text-2xl font-bold mb-4">GH₵ 290</div>
+          <div className="text-3xl font-bold">GH₵ 294</div>
           <ul className="list-disc list-inside text-gray-700 mb-6">
             <li>10 Users</li>
             <li>5 Projects</li>
@@ -21,7 +21,7 @@ const HomePage = () => {
         <div className="bg-white rounded-lg shadow-md p-6">
           <h2 className="text-xl font-semibold mb-4">Business</h2>
           <p className="text-gray-600 mb-4">Perfect for growing businesses with more complex needs.</p>
-          <div className="text-2xl font-bold mb-4">GH₵ 890</div>
+          <div className="text-3xl font-bold">GH₵ 894</div>
           <ul className="list-disc list-inside text-gray-700 mb-6">
             <li>50 Users</li>
             <li>20 Projects</li>
@@ -36,7 +36,8 @@ const HomePage = () => {
         <div className="bg-white rounded-lg shadow-md p-6">
           <h2 className="text-xl font-semibold mb-4">Enterprise</h2>
           <p className="text-gray-600 mb-4">For large organizations requiring advanced features and support.</p>
-          <div className="text-2xl font-bold mb-4">GH₵ 2,990</div>
+          <div className="text-3xl font-bold">Custom</div>
+          <p className="text-sm text-gray-500">contact for pricing</p>
           <ul className="list-disc list-inside text-gray-700 mb-6">
             <li>Unlimited Users</li>
             <li>Unlimited Projects</li>
