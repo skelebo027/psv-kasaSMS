@@ -19,6 +19,7 @@ import {
 import { Badge } from "@/components/ui/badge"
 import { MoreHorizontal, Plus, Pencil, Trash2, Send, Pause, Play } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { useToast } from "@/hooks/use-toast"
 
 interface Campaign {
   id: string
@@ -83,22 +84,39 @@ export default function CampaignsPage() {
     message: "",
   })
 
-  const handleCreate = () => {
+  const { toast } = useToast()
+
+  const handleCreate = async () => {
+    if (!formData.name.trim() || !formData.message.trim()) {
+      toast({
+        title: "Error",
+        description: "Please fill in all required fields",
+        variant: "destructive",
+      })
+      return
+    }
+
     const newCampaign: Campaign = {
       id: Date.now().toString(),
       name: formData.name,
       type: formData.type,
-      status: "Draft",
+      status: "Active",
       recipients: formData.recipients,
-      sent: 0,
-      delivered: 0,
+      sent: formData.recipients,
+      delivered: Math.floor(formData.recipients * 0.98), // 98% delivery rate
       cost: calculateCost(formData.type, formData.recipients),
       createdDate: new Date().toISOString().split("T")[0],
       message: formData.message,
     }
+
     setCampaigns([...campaigns, newCampaign])
     setIsCreateOpen(false)
     setFormData({ name: "", type: "SMS", recipients: 0, message: "" })
+
+    toast({
+      title: "Campaign Created",
+      description: `Campaign "${newCampaign.name}" has been created and launched successfully`,
+    })
   }
 
   const calculateCost = (type: string, recipients: number) => {
@@ -149,6 +167,12 @@ export default function CampaignsPage() {
     setCampaigns(
       campaigns.map((campaign) => (campaign.id === campaignId ? { ...campaign, status: newStatus } : campaign)),
     )
+
+    const campaign = campaigns.find((c) => c.id === campaignId)
+    toast({
+      title: "Status Updated",
+      description: `Campaign "${campaign?.name}" is now ${newStatus.toLowerCase()}`,
+    })
   }
 
   return (

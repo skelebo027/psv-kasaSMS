@@ -1,68 +1,88 @@
 "use client"
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
-import { Badge } from "@/components/ui/badge"
-import { MoreHorizontal, Plus, Pencil, Trash2 } from "lucide-react"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+import { Button } from "@/components/ui/button"
+import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { useToast } from "@/components/ui/use-toast"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { PlusCircle } from "lucide-react"
+import { useState } from "react"
+import { useForm } from "react-hook-form"
+import * as z from "zod"
 
-interface User {
+type User = {
   id: string
   name: string
   email: string
-  role: string
-  status: string
+  role: "Customer" | "Reseller" | "Admin"
+  status: "Active" | "Inactive"
   credits: number
   joinDate: string
 }
+
+const roleOptions = [
+  { value: "Customer", label: "Customer" },
+  { value: "Reseller", label: "Reseller" },
+  { value: "Admin", label: "Admin" },
+]
+
+const formSchema = z.object({
+  name: z.string().min(2, {
+    message: "Name must be at least 2 characters.",
+  }),
+  email: z.string().email({
+    message: "Invalid email address.",
+  }),
+  role: z.enum(["Customer", "Reseller", "Admin"]).default("Customer"),
+  credits: z.number().default(0),
+})
 
 export default function UsersPage() {
   const [users, setUsers] = useState<User[]>([
     {
       id: "1",
       name: "John Doe",
-      email: "john@example.com",
+      email: "john.doe@example.com",
       role: "Customer",
       status: "Active",
-      credits: 1500,
-      joinDate: "2024-01-15",
+      credits: 100,
+      joinDate: "2023-01-01",
     },
     {
       id: "2",
       name: "Jane Smith",
-      email: "jane@example.com",
+      email: "jane.smith@example.com",
       role: "Reseller",
       status: "Active",
-      credits: 5000,
-      joinDate: "2024-02-20",
+      credits: 50,
+      joinDate: "2023-02-15",
     },
     {
       id: "3",
-      name: "Bob Wilson",
-      email: "bob@example.com",
-      role: "Customer",
-      status: "Suspended",
-      credits: 250,
-      joinDate: "2024-03-10",
+      name: "Alice Johnson",
+      email: "alice.johnson@example.com",
+      role: "Admin",
+      status: "Inactive",
+      credits: 200,
+      joinDate: "2023-03-10",
     },
   ])
 
   const [isCreateOpen, setIsCreateOpen] = useState(false)
-  const [isEditOpen, setIsEditOpen] = useState(false)
-  const [selectedUser, setSelectedUser] = useState<User | null>(null)
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -70,222 +90,224 @@ export default function UsersPage() {
     credits: 0,
   })
 
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      role: "Customer",
+      credits: 0,
+    },
+  })
+
+  const { toast } = useToast()
+
   const handleCreate = () => {
+    if (!formData.name.trim() || !formData.email.trim()) {
+      toast({
+        title: "Error",
+        description: "Please fill in all required fields",
+        variant: "destructive",
+      })
+      return
+    }
+
     const newUser: User = {
       id: Date.now().toString(),
       name: formData.name,
       email: formData.email,
-      role: formData.role,
+      role: formData.role as "Customer" | "Reseller" | "Admin",
       status: "Active",
       credits: formData.credits,
       joinDate: new Date().toISOString().split("T")[0],
     }
+
     setUsers([...users, newUser])
     setIsCreateOpen(false)
     setFormData({ name: "", email: "", role: "Customer", credits: 0 })
-  }
 
-  const handleEdit = (user: User) => {
-    setSelectedUser(user)
-    setFormData({
-      name: user.name,
-      email: user.email,
-      role: user.role,
-      credits: user.credits,
+    toast({
+      title: "User Created",
+      description: `User "${newUser.name}" has been created successfully`,
     })
-    setIsEditOpen(true)
-  }
-
-  const handleUpdate = () => {
-    if (!selectedUser) return
-
-    setUsers(users.map((user) => (user.id === selectedUser.id ? { ...user, ...formData } : user)))
-    setIsEditOpen(false)
-    setSelectedUser(null)
-    setFormData({ name: "", email: "", role: "Customer", credits: 0 })
   }
 
   const handleDelete = (userId: string) => {
+    const user = users.find((u) => u.id === userId)
     setUsers(users.filter((user) => user.id !== userId))
+
+    toast({
+      title: "User Deleted",
+      description: `User "${user?.name}" has been deleted`,
+    })
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">User Management</h1>
-          <p className="text-muted-foreground">Manage your platform users and their permissions</p>
-        </div>
-        <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
-          <DialogTrigger asChild>
-            <Button>
-              <Plus className="mr-2 h-4 w-4" />
-              Add User
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Create New User</DialogTitle>
-              <DialogDescription>Add a new user to the platform</DialogDescription>
-            </DialogHeader>
-            <div className="grid gap-4 py-4">
-              <div className="grid gap-2">
-                <Label htmlFor="name">Name</Label>
-                <Input
-                  id="name"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                />
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                />
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="role">Role</Label>
-                <select
-                  id="role"
-                  value={formData.role}
-                  onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-                >
-                  <option value="Customer">Customer</option>
-                  <option value="Reseller">Reseller</option>
-                  <option value="Admin">Admin</option>
-                </select>
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="credits">Initial Credits</Label>
-                <Input
-                  id="credits"
-                  type="number"
-                  value={formData.credits}
-                  onChange={(e) => setFormData({ ...formData, credits: Number.parseInt(e.target.value) || 0 })}
-                />
-              </div>
-            </div>
-            <DialogFooter>
-              <Button onClick={handleCreate}>Create User</Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
-      </div>
-
+    <div className="container mx-auto py-10">
       <Card>
         <CardHeader>
           <CardTitle>Users</CardTitle>
-          <CardDescription>A list of all users in your platform</CardDescription>
+          <CardDescription>Manage your users.</CardDescription>
         </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Email</TableHead>
-                <TableHead>Role</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Credits</TableHead>
-                <TableHead>Join Date</TableHead>
-                <TableHead className="w-[70px]">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {users.map((user) => (
-                <TableRow key={user.id}>
-                  <TableCell className="font-medium">{user.name}</TableCell>
-                  <TableCell>{user.email}</TableCell>
-                  <TableCell>
-                    <Badge variant={user.role === "Admin" ? "default" : "secondary"}>{user.role}</Badge>
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant={user.status === "Active" ? "default" : "destructive"}>{user.status}</Badge>
-                  </TableCell>
-                  <TableCell>GH₵ {user.credits.toLocaleString()}</TableCell>
-                  <TableCell>{user.joinDate}</TableCell>
-                  <TableCell>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-8 p-0">
-                          <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={() => handleEdit(user)}>
-                          <Pencil className="mr-2 h-4 w-4" />
-                          Edit
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleDelete(user.id)} className="text-red-600">
-                          <Trash2 className="mr-2 h-4 w-4" />
-                          Delete
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </CardContent>
+        <CardFooter className="flex justify-between">
+          <Button onClick={() => setIsCreateOpen(true)}>
+            <PlusCircle className="mr-2 h-4 w-4" /> Create User
+          </Button>
+        </CardFooter>
       </Card>
 
-      {/* Edit Dialog */}
-      <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Edit User</DialogTitle>
-            <DialogDescription>Update user information</DialogDescription>
-          </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid gap-2">
-              <Label htmlFor="edit-name">Name</Label>
-              <Input
-                id="edit-name"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+      <Table>
+        <TableCaption>A list of your registered users.</TableCaption>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Name</TableHead>
+            <TableHead>Email</TableHead>
+            <TableHead>Role</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead>Credits</TableHead>
+            <TableHead>Join Date</TableHead>
+            <TableHead className="text-right">Actions</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {users.map((user) => (
+            <TableRow key={user.id}>
+              <TableCell>{user.name}</TableCell>
+              <TableCell>{user.email}</TableCell>
+              <TableCell>{user.role}</TableCell>
+              <TableCell>{user.status}</TableCell>
+              <TableCell>{user.credits}</TableCell>
+              <TableCell>{user.joinDate}</TableCell>
+              <TableCell className="text-right">
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button variant="destructive" size="sm">
+                      Delete
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        This action cannot be undone. This will permanently delete the user from our servers.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction onClick={() => handleDelete(user.id)}>Continue</AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+
+      <AlertDialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Create User</AlertDialogTitle>
+            <AlertDialogDescription>Add a new user to the system.</AlertDialogDescription>
+          </AlertDialogHeader>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(handleCreate)} className="space-y-4">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Name</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="John Doe"
+                        {...field}
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="edit-email">Email</Label>
-              <Input
-                id="edit-email"
-                type="email"
-                value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="john.doe@example.com"
+                        {...field}
+                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="edit-role">Role</Label>
-              <select
-                id="edit-role"
-                value={formData.role}
-                onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-              >
-                <option value="Customer">Customer</option>
-                <option value="Reseller">Reseller</option>
-                <option value="Admin">Admin</option>
-              </select>
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="edit-credits">Credits</Label>
-              <Input
-                id="edit-credits"
-                type="number"
-                value={formData.credits}
-                onChange={(e) => setFormData({ ...formData, credits: Number.parseInt(e.target.value) || 0 })}
+              <FormField
+                control={form.control}
+                name="role"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Role</FormLabel>
+                    <Select
+                      onValueChange={(value) => {
+                        field.onChange(value)
+                        setFormData({ ...formData, role: value })
+                      }}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a role" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {roleOptions.map((role) => (
+                          <SelectItem key={role.value} value={role.value}>
+                            {role.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
-          </div>
-          <DialogFooter>
-            <Button onClick={handleUpdate}>Update User</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+              <FormField
+                control={form.control}
+                name="credits"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Credits</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        placeholder="0"
+                        {...field}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            credits: Number.parseInt(e.target.value),
+                          })
+                        }
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction type="submit">Create</AlertDialogAction>
+              </AlertDialogFooter>
+            </form>
+          </Form>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }

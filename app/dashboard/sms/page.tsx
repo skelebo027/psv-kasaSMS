@@ -1,10 +1,9 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
 import Link from "next/link"
-import { ArrowRight, Check, Clock, Download, MessageSquare, Plus, Upload, Users } from "lucide-react"
+import { ArrowRight, Check, Clock, Download, MessageSquare, Plus, Upload, Users, Send, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -12,11 +11,20 @@ import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { useToast } from "@/hooks/use-toast"
+import { smsGateway } from "@/lib/sms-gateway"
 
 export default function SMSPage() {
   const [messageText, setMessageText] = useState("")
   const [characterCount, setCharacterCount] = useState(0)
   const [messageCount, setMessageCount] = useState(1)
+  const [campaignName, setCampaignName] = useState("")
+  const [senderId, setSenderId] = useState("")
+  const [recipients, setRecipients] = useState("")
+  const [selectedGroup, setSelectedGroup] = useState("")
+  const [isLoading, setIsLoading] = useState(false)
+  const [currentTab, setCurrentTab] = useState("compose")
+  const { toast } = useToast()
 
   const handleMessageChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const text = e.target.value
@@ -27,6 +35,105 @@ export default function SMSPage() {
     const segments = Math.ceil(text.length / 160) || 1
     setMessageCount(segments)
   }
+
+  const handleSendSMS = async () => {
+    if (!messageText.trim()) {
+      toast({
+        title: "Error",
+        description: "Please enter a message",
+        variant: "destructive",
+      })
+      return
+    }
+
+    if (!recipients.trim() && !selectedGroup) {
+      toast({
+        title: "Error",
+        description: "Please select recipients or enter phone numbers",
+        variant: "destructive",
+      })
+      return
+    }
+
+    setIsLoading(true)
+
+    try {
+      // Parse recipients
+      const phoneNumbers = recipients
+        .split(",")
+        .map((num) => num.trim())
+        .filter((num) => num)
+
+      if (phoneNumbers.length === 0) {
+        // Use selected group (mock data for now)
+        phoneNumbers.push("+233123456789", "+233987654321", "+233567891234")
+      }
+
+      const messages = phoneNumbers.map((phone) => ({
+        to: phone,
+        from: senderId || "KasaSMS",
+        message: messageText,
+      }))
+
+      const results = await smsGateway.sendBulkSMS(messages)
+      const successCount = results.filter((r) => r.success).length
+      const failCount = results.length - successCount
+
+      if (successCount > 0) {
+        toast({
+          title: "Messages Sent",
+          description: `${successCount} messages sent successfully${failCount > 0 ? `, ${failCount} failed` : ""}`,
+        })
+
+        // Reset form
+        setMessageText("")
+        setCharacterCount(0)
+        setMessageCount(1)
+        setRecipients("")
+        setCampaignName("")
+      } else {
+        toast({
+          title: "Send Failed",
+          description: "Failed to send messages. Please try again.",
+          variant: "destructive",
+        })
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "An error occurred while sending messages",
+        variant: "destructive",
+      })
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleContinueToRecipients = () => {
+    if (!messageText.trim()) {
+      toast({
+        title: "Error",
+        description: "Please enter a message before continuing",
+        variant: "destructive",
+      })
+      return
+    }
+    setCurrentTab("recipients")
+  }
+
+  const handleContinueToSchedule = () => {
+    if (!selectedGroup && !recipients.trim()) {
+      toast({
+        title: "Error",
+        description: "Please select recipients before continuing",
+        variant: "destructive",
+      })
+      return
+    }
+    setCurrentTab("schedule")
+  }
+
+  const estimatedCost = messageCount * (recipients.split(",").filter((r) => r.trim()).length || 4585) * 0.03
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -103,7 +210,7 @@ export default function SMSPage() {
               <Plus className="mr-2 h-4 w-4" /> New Campaign
             </Button>
           </div>
-          <Tabs defaultValue="compose" className="w-full">
+          <Tabs value={currentTab} onValueChange={setCurrentTab} className="w-full">
             <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="compose">Compose Message</TabsTrigger>
               <TabsTrigger value="recipients">Recipients</TabsTrigger>
@@ -120,11 +227,21 @@ export default function SMSPage() {
                 <CardContent className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="campaign-name">Campaign Name</Label>
-                    <Input id="campaign-name" placeholder="Enter campaign name" />
+                    <Input
+                      id="campaign-name"
+                      placeholder="Enter campaign name"
+                      value={campaignName}
+                      onChange={(e) => setCampaignName(e.target.value)}
+                    />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="sender-id">Sender ID</Label>
-                    <Input id="sender-id" placeholder="Enter sender ID" />
+                    <Input
+                      id="sender-id"
+                      placeholder="Enter sender ID"
+                      value={senderId}
+                      onChange={(e) => setSenderId(e.target.value)}
+                    />
                     <p className="text-xs text-muted-foreground">
                       This is the name that will appear as the sender of your message.
                     </p>
@@ -168,7 +285,9 @@ export default function SMSPage() {
                 </CardContent>
                 <CardFooter className="flex justify-between">
                   <Button variant="outline">Save as Template</Button>
-                  <Button className="bg-orange-500 hover:bg-orange-600">Continue to Recipients</Button>
+                  <Button className="bg-orange-500 hover:bg-orange-600" onClick={handleContinueToRecipients}>
+                    Continue to Recipients
+                  </Button>
                 </CardFooter>
               </Card>
             </TabsContent>
@@ -210,7 +329,7 @@ export default function SMSPage() {
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="contact-groups">Select Contact Groups</Label>
-                    <Select>
+                    <Select value={selectedGroup} onValueChange={setSelectedGroup}>
                       <SelectTrigger>
                         <SelectValue placeholder="Select contact groups" />
                       </SelectTrigger>
@@ -222,11 +341,23 @@ export default function SMSPage() {
                       </SelectContent>
                     </Select>
                   </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="manual-recipients">Manual Entry (comma-separated)</Label>
+                    <Textarea
+                      id="manual-recipients"
+                      placeholder="+233123456789, +233987654321, +233567891234"
+                      value={recipients}
+                      onChange={(e) => setRecipients(e.target.value)}
+                    />
+                  </div>
                   <div className="rounded-md border p-4">
                     <div className="flex items-center justify-between">
                       <div>
                         <h3 className="font-medium">Selected Recipients</h3>
-                        <p className="text-sm text-muted-foreground">4,585 contacts selected</p>
+                        <p className="text-sm text-muted-foreground">
+                          {recipients.split(",").filter((r) => r.trim()).length || (selectedGroup ? 4585 : 0)} contacts
+                          selected
+                        </p>
                       </div>
                       <div className="flex gap-2">
                         <Button variant="outline" size="sm">
@@ -242,8 +373,12 @@ export default function SMSPage() {
                   </div>
                 </CardContent>
                 <CardFooter className="flex justify-between">
-                  <Button variant="outline">Back to Compose</Button>
-                  <Button className="bg-orange-500 hover:bg-orange-600">Continue to Schedule</Button>
+                  <Button variant="outline" onClick={() => setCurrentTab("compose")}>
+                    Back to Compose
+                  </Button>
+                  <Button className="bg-orange-500 hover:bg-orange-600" onClick={handleContinueToSchedule}>
+                    Continue to Schedule
+                  </Button>
                 </CardFooter>
               </Card>
             </TabsContent>
@@ -281,15 +416,18 @@ export default function SMSPage() {
                       <div className="mt-2 grid grid-cols-2 gap-2 text-sm">
                         <div>
                           <p className="text-muted-foreground">Campaign Name:</p>
-                          <p>May Promotion</p>
+                          <p>{campaignName || "Untitled Campaign"}</p>
                         </div>
                         <div>
                           <p className="text-muted-foreground">Sender ID:</p>
-                          <p>KasaSMS</p>
+                          <p>{senderId || "KasaSMS"}</p>
                         </div>
                         <div>
                           <p className="text-muted-foreground">Recipients:</p>
-                          <p>4,585 contacts</p>
+                          <p>
+                            {recipients.split(",").filter((r) => r.trim()).length || (selectedGroup ? 4585 : 0)}{" "}
+                            contacts
+                          </p>
                         </div>
                         <div>
                           <p className="text-muted-foreground">Message Length:</p>
@@ -299,11 +437,11 @@ export default function SMSPage() {
                         </div>
                         <div>
                           <p className="text-muted-foreground">Total SMS:</p>
-                          <p>{messageCount * 4585} SMS</p>
+                          <p>{messageCount * (recipients.split(",").filter((r) => r.trim()).length || 4585)} SMS</p>
                         </div>
                         <div>
                           <p className="text-muted-foreground">Estimated Cost:</p>
-                          <p className="font-medium text-orange-500">$229.25</p>
+                          <p className="font-medium text-orange-500">GH₵ {estimatedCost.toFixed(2)}</p>
                         </div>
                       </div>
                     </div>
@@ -317,8 +455,22 @@ export default function SMSPage() {
                   </div>
                 </CardContent>
                 <CardFooter className="flex justify-between">
-                  <Button variant="outline">Back to Recipients</Button>
-                  <Button className="bg-orange-500 hover:bg-orange-600">Send Campaign</Button>
+                  <Button variant="outline" onClick={() => setCurrentTab("recipients")}>
+                    Back to Recipients
+                  </Button>
+                  <Button className="bg-orange-500 hover:bg-orange-600" onClick={handleSendSMS} disabled={isLoading}>
+                    {isLoading ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Sending...
+                      </>
+                    ) : (
+                      <>
+                        <Send className="mr-2 h-4 w-4" />
+                        Send Campaign
+                      </>
+                    )}
+                  </Button>
                 </CardFooter>
               </Card>
             </TabsContent>
