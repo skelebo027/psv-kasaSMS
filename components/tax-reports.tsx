@@ -18,9 +18,9 @@ const vatReportData = [
   {
     id: "VAT-2023-Q1",
     period: "Q1 2023",
-    collected: 12500.0,
-    paid: 2300.0,
-    net: 10200.0,
+    collected: 12500.0 * 6,
+    paid: 2300.0 * 6,
+    net: 10200.0 * 6,
     status: "Filed",
     dueDate: "2023-04-30",
     filingDate: "2023-04-15",
@@ -28,9 +28,9 @@ const vatReportData = [
   {
     id: "VAT-2023-Q2",
     period: "Q2 2023",
-    collected: 14800.0,
-    paid: 3100.0,
-    net: 11700.0,
+    collected: 14800.0 * 6,
+    paid: 3100.0 * 6,
+    net: 11700.0 * 6,
     status: "Filed",
     dueDate: "2023-07-31",
     filingDate: "2023-07-20",
@@ -38,9 +38,9 @@ const vatReportData = [
   {
     id: "VAT-2023-Q3",
     period: "Q3 2023",
-    collected: 16200.0,
-    paid: 3500.0,
-    net: 12700.0,
+    collected: 16200.0 * 6,
+    paid: 3500.0 * 6,
+    net: 12700.0 * 6,
     status: "Pending",
     dueDate: "2023-10-31",
     filingDate: null,
@@ -51,9 +51,9 @@ const salesTaxReportData = [
   {
     id: "ST-2023-01",
     period: "Jan 2023",
-    collected: 4200.0,
-    exempt: 800.0,
-    taxable: 3400.0,
+    collected: 4200.0 * 6,
+    exempt: 800.0 * 6,
+    taxable: 3400.0 * 6,
     status: "Filed",
     dueDate: "2023-02-20",
     filingDate: "2023-02-15",
@@ -61,9 +61,9 @@ const salesTaxReportData = [
   {
     id: "ST-2023-02",
     period: "Feb 2023",
-    collected: 3800.0,
-    exempt: 600.0,
-    taxable: 3200.0,
+    collected: 3800.0 * 6,
+    exempt: 600.0 * 6,
+    taxable: 3200.0 * 6,
     status: "Filed",
     dueDate: "2023-03-20",
     filingDate: "2023-03-18",
@@ -71,9 +71,9 @@ const salesTaxReportData = [
   {
     id: "ST-2023-03",
     period: "Mar 2023",
-    collected: 4500.0,
-    exempt: 900.0,
-    taxable: 3600.0,
+    collected: 4500.0 * 6,
+    exempt: 900.0 * 6,
+    taxable: 3600.0 * 6,
     status: "Filed",
     dueDate: "2023-04-20",
     filingDate: "2023-04-15",
@@ -81,9 +81,9 @@ const salesTaxReportData = [
   {
     id: "ST-2023-04",
     period: "Apr 2023",
-    collected: 4300.0,
-    exempt: 850.0,
-    taxable: 3450.0,
+    collected: 4300.0 * 6,
+    exempt: 850.0 * 6,
+    taxable: 3450.0 * 6,
     status: "Filed",
     dueDate: "2023-05-20",
     filingDate: "2023-05-18",
@@ -91,9 +91,9 @@ const salesTaxReportData = [
   {
     id: "ST-2023-05",
     period: "May 2023",
-    collected: 4700.0,
-    exempt: 950.0,
-    taxable: 3750.0,
+    collected: 4700.0 * 6,
+    exempt: 950.0 * 6,
+    taxable: 3750.0 * 6,
     status: "Filed",
     dueDate: "2023-06-20",
     filingDate: "2023-06-15",
@@ -101,9 +101,9 @@ const salesTaxReportData = [
   {
     id: "ST-2023-06",
     period: "Jun 2023",
-    collected: 5100.0,
-    exempt: 1050.0,
-    taxable: 4050.0,
+    collected: 5100.0 * 6,
+    exempt: 1050.0 * 6,
+    taxable: 4050.0 * 6,
     status: "Pending",
     dueDate: "2023-07-20",
     filingDate: null,
@@ -114,8 +114,8 @@ const withholdingTaxReportData = [
   {
     id: "WT-2023-Q1",
     period: "Q1 2023",
-    withheld: 5600.0,
-    remitted: 5600.0,
+    withheld: 5600.0 * 6,
+    remitted: 5600.0 * 6,
     status: "Filed",
     dueDate: "2023-04-30",
     filingDate: "2023-04-25",
@@ -123,8 +123,8 @@ const withholdingTaxReportData = [
   {
     id: "WT-2023-Q2",
     period: "Q2 2023",
-    withheld: 6200.0,
-    remitted: 6200.0,
+    withheld: 6200.0 * 6,
+    remitted: 6200.0 * 6,
     status: "Filed",
     dueDate: "2023-07-31",
     filingDate: "2023-07-28",
@@ -132,7 +132,7 @@ const withholdingTaxReportData = [
   {
     id: "WT-2023-Q3",
     period: "Q3 2023",
-    withheld: 6800.0,
+    withheld: 6800.0 * 6,
     remitted: 0.0,
     status: "Draft",
     dueDate: "2023-10-31",
@@ -215,9 +215,9 @@ export function TaxReports() {
                       <TableRow key={report.id}>
                         <TableCell className="font-medium">{report.id}</TableCell>
                         <TableCell>{report.period}</TableCell>
-                        <TableCell className="text-right">${report.collected.toFixed(2)}</TableCell>
-                        <TableCell className="text-right">${report.paid.toFixed(2)}</TableCell>
-                        <TableCell className="text-right">${report.net.toFixed(2)}</TableCell>
+                        <TableCell className="text-right">GH₵{report.collected.toFixed(2)}</TableCell>
+                        <TableCell className="text-right">GH₵{report.paid.toFixed(2)}</TableCell>
+                        <TableCell className="text-right">GH₵{report.net.toFixed(2)}</TableCell>
                         <TableCell>{report.dueDate}</TableCell>
                         <TableCell>
                           <Badge variant={report.status === "Filed" ? "outline" : "secondary"}>{report.status}</Badge>
@@ -262,9 +262,9 @@ export function TaxReports() {
                       <TableRow key={report.id}>
                         <TableCell className="font-medium">{report.id}</TableCell>
                         <TableCell>{report.period}</TableCell>
-                        <TableCell className="text-right">${report.collected.toFixed(2)}</TableCell>
-                        <TableCell className="text-right">${report.exempt.toFixed(2)}</TableCell>
-                        <TableCell className="text-right">${report.taxable.toFixed(2)}</TableCell>
+                        <TableCell className="text-right">GH₵{report.collected.toFixed(2)}</TableCell>
+                        <TableCell className="text-right">GH₵{report.exempt.toFixed(2)}</TableCell>
+                        <TableCell className="text-right">GH₵{report.taxable.toFixed(2)}</TableCell>
                         <TableCell>{report.dueDate}</TableCell>
                         <TableCell>
                           <Badge variant={report.status === "Filed" ? "outline" : "secondary"}>{report.status}</Badge>
@@ -308,8 +308,8 @@ export function TaxReports() {
                       <TableRow key={report.id}>
                         <TableCell className="font-medium">{report.id}</TableCell>
                         <TableCell>{report.period}</TableCell>
-                        <TableCell className="text-right">${report.withheld.toFixed(2)}</TableCell>
-                        <TableCell className="text-right">${report.remitted.toFixed(2)}</TableCell>
+                        <TableCell className="text-right">GH₵{report.withheld.toFixed(2)}</TableCell>
+                        <TableCell className="text-right">GH₵{report.remitted.toFixed(2)}</TableCell>
                         <TableCell>{report.dueDate}</TableCell>
                         <TableCell>
                           <Badge

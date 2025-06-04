@@ -23,18 +23,18 @@ import { format } from "date-fns"
 import { useState } from "react"
 
 const taxData = [
-  { month: "Jan", vat: 4200, salesTax: 2400, withholdingTax: 1800 },
-  { month: "Feb", vat: 3800, salesTax: 2100, withholdingTax: 1600 },
-  { month: "Mar", vat: 5000, salesTax: 2800, withholdingTax: 2200 },
-  { month: "Apr", vat: 4800, salesTax: 2600, withholdingTax: 2000 },
-  { month: "May", vat: 5200, salesTax: 3000, withholdingTax: 2400 },
-  { month: "Jun", vat: 5800, salesTax: 3200, withholdingTax: 2600 },
+  { month: "Jan", vat: 4200 * 6, salesTax: 2400 * 6, withholdingTax: 1800 * 6 },
+  { month: "Feb", vat: 3800 * 6, salesTax: 2100 * 6, withholdingTax: 1600 * 6 },
+  { month: "Mar", vat: 5000 * 6, salesTax: 2800 * 6, withholdingTax: 2200 * 6 },
+  { month: "Apr", vat: 4800 * 6, salesTax: 2600 * 6, withholdingTax: 2000 * 6 },
+  { month: "May", vat: 5200 * 6, salesTax: 3000 * 6, withholdingTax: 2400 * 6 },
+  { month: "Jun", vat: 5800 * 6, salesTax: 3200 * 6, withholdingTax: 2600 * 6 },
 ]
 
 const taxDistribution = [
-  { name: "VAT", value: 28800, color: "#ff9800" },
-  { name: "Sales Tax", value: 16100, color: "#ffb74d" },
-  { name: "Withholding Tax", value: 12600, color: "#ffcc80" },
+  { name: "VAT", value: 28800 * 6, color: "#ff9800" },
+  { name: "Sales Tax", value: 16100 * 6, color: "#ffb74d" },
+  { name: "Withholding Tax", value: 12600 * 6, color: "#ffcc80" },
 ]
 
 const COLORS = ["#ff9800", "#ffb74d", "#ffcc80"]
@@ -135,12 +135,12 @@ export function TaxOverview() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="bg-muted rounded-lg p-4">
               <div className="text-sm font-medium">Total Tax Collected</div>
-              <div className="text-2xl font-bold mt-2">$57,500.00</div>
+              <div className="text-2xl font-bold mt-2">GH₵ 345,000.00</div>
               <div className="text-xs text-muted-foreground mt-1">+12.5% from last period</div>
             </div>
             <div className="bg-muted rounded-lg p-4">
               <div className="text-sm font-medium">Pending Tax Payments</div>
-              <div className="text-2xl font-bold mt-2">$12,350.00</div>
+              <div className="text-2xl font-bold mt-2">GH₵ 74,100.00</div>
               <div className="text-xs text-muted-foreground mt-1">Due in 15 days</div>
             </div>
             <div className="bg-muted rounded-lg p-4">

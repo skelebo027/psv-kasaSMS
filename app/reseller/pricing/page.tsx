@@ -141,8 +141,8 @@ export default function PricingPage() {
                       </CardHeader>
                       <CardContent className="space-y-4">
                         <div className="space-y-2">
-                          <Label htmlFor="starter-price">Monthly Price ($)</Label>
-                          <Input id="starter-price" type="number" defaultValue="49" />
+                          <Label htmlFor="starter-price">Monthly Price (GH₵)</Label>
+                          <Input id="starter-price" type="number" defaultValue="294" />
                         </div>
                         <div className="space-y-2">
                           <Label htmlFor="starter-sms">SMS Credits</Label>
@@ -192,8 +192,8 @@ export default function PricingPage() {
                       </CardHeader>
                       <CardContent className="space-y-4">
                         <div className="space-y-2">
-                          <Label htmlFor="business-price">Monthly Price ($)</Label>
-                          <Input id="business-price" type="number" defaultValue="149" />
+                          <Label htmlFor="business-price">Monthly Price (GH₵)</Label>
+                          <Input id="business-price" type="number" defaultValue="894" />
                         </div>
                         <div className="space-y-2">
                           <Label htmlFor="business-sms">SMS Credits</Label>
@@ -243,8 +243,8 @@ export default function PricingPage() {
                       </CardHeader>
                       <CardContent className="space-y-4">
                         <div className="space-y-2">
-                          <Label htmlFor="enterprise-price">Monthly Price ($)</Label>
-                          <Input id="enterprise-price" type="number" defaultValue="499" />
+                          <Label htmlFor="enterprise-price">Monthly Price (GH₵)</Label>
+                          <Input id="enterprise-price" type="number" defaultValue="2,994" />
                         </div>
                         <div className="space-y-2">
                           <Label htmlFor="enterprise-sms">SMS Credits</Label>
@@ -310,19 +310,19 @@ export default function PricingPage() {
                     <div className="mt-2 space-y-2 text-sm">
                       <div className="flex justify-between">
                         <span>Base KasaSMS Price:</span>
-                        <span>$100.00</span>
+                        <span>GH₵ 600.00</span>
                       </div>
                       <div className="flex justify-between">
                         <span>Your Markup (30%):</span>
-                        <span>$30.00</span>
+                        <span>GH₵ 180.00</span>
                       </div>
                       <div className="flex justify-between font-medium">
                         <span>Client Price:</span>
-                        <span>$130.00</span>
+                        <span>GH₵ 780.00</span>
                       </div>
                       <div className="flex justify-between text-purple-600">
-                        <span>Your Commission (30% of $130):</span>
-                        <span>$39.00</span>
+                        <span>Your Commission (30% of GH₵ 780):</span>
+                        <span>GH₵ 234.00</span>
                       </div>
                     </div>
                   </div>

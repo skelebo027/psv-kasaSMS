@@ -114,7 +114,7 @@ export default function BillingPage() {
                     <Wallet className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">$345.00</div>
+                    <div className="text-2xl font-bold">GH₵ 2,070.00</div>
                     <p className="text-xs text-muted-foreground">Available for services</p>
                   </CardContent>
                 </Card>
@@ -136,7 +136,7 @@ export default function BillingPage() {
                     </svg>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">$1,245.00</div>
+                    <div className="text-2xl font-bold">GH₵ 7,470.00</div>
                     <p className="text-xs text-muted-foreground">+12% from last month</p>
                   </CardContent>
                 </Card>
@@ -147,7 +147,7 @@ export default function BillingPage() {
                   </CardHeader>
                   <CardContent>
                     <div className="text-2xl font-bold">3,450</div>
-                    <p className="text-xs text-muted-foreground">Approx. $172.50 value</p>
+                    <p className="text-xs text-muted-foreground">Approx. GH₵ 1,035.00 value</p>
                   </CardContent>
                 </Card>
                 <Card>
@@ -157,7 +157,7 @@ export default function BillingPage() {
                   </CardHeader>
                   <CardContent>
                     <div className="text-2xl font-bold">May 28, 2025</div>
-                    <p className="text-xs text-muted-foreground">Business Plan - $149.00</p>
+                    <p className="text-xs text-muted-foreground">Business Plan - GH₵ 894.00</p>
                   </CardContent>
                 </Card>
               </div>
@@ -175,7 +175,7 @@ export default function BillingPage() {
                         <p className="text-sm text-muted-foreground">Billed monthly</p>
                       </div>
                       <div className="text-right">
-                        <p className="font-medium">$149.00/month</p>
+                        <p className="font-medium">GH₵ 894.00/month</p>
                         <p className="text-sm text-muted-foreground">Next billing: May 28, 2025</p>
                       </div>
                     </div>
@@ -237,31 +237,31 @@ export default function BillingPage() {
                       <TableRow>
                         <TableCell>May 12, 2025</TableCell>
                         <TableCell>SMS Credits Purchase</TableCell>
-                        <TableCell className="font-medium">$49.00</TableCell>
+                        <TableCell className="font-medium">GH₵ 294.00</TableCell>
                         <TableCell className="text-green-500">Completed</TableCell>
                       </TableRow>
                       <TableRow>
                         <TableCell>May 8, 2025</TableCell>
                         <TableCell>Voice Credits Purchase</TableCell>
-                        <TableCell className="font-medium">$29.00</TableCell>
+                        <TableCell className="font-medium">GH₵ 174.00</TableCell>
                         <TableCell className="text-green-500">Completed</TableCell>
                       </TableRow>
                       <TableRow>
                         <TableCell>May 1, 2025</TableCell>
                         <TableCell>Monthly Subscription</TableCell>
-                        <TableCell className="font-medium">$149.00</TableCell>
+                        <TableCell className="font-medium">GH₵ 894.00</TableCell>
                         <TableCell className="text-green-500">Completed</TableCell>
                       </TableRow>
                       <TableRow>
                         <TableCell>Apr 15, 2025</TableCell>
                         <TableCell>SMS Credits Purchase</TableCell>
-                        <TableCell className="font-medium">$99.00</TableCell>
+                        <TableCell className="font-medium">GH₵ 594.00</TableCell>
                         <TableCell className="text-green-500">Completed</TableCell>
                       </TableRow>
                       <TableRow>
                         <TableCell>Apr 1, 2025</TableCell>
                         <TableCell>Monthly Subscription</TableCell>
-                        <TableCell className="font-medium">$149.00</TableCell>
+                        <TableCell className="font-medium">GH₵ 894.00</TableCell>
                         <TableCell className="text-green-500">Completed</TableCell>
                       </TableRow>
                     </TableBody>
@@ -304,10 +304,10 @@ export default function BillingPage() {
                         <SelectValue placeholder="Select amount" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="500">500 Credits - $25.00</SelectItem>
-                        <SelectItem value="1000">1,000 Credits - $49.00</SelectItem>
-                        <SelectItem value="5000">5,000 Credits - $225.00</SelectItem>
-                        <SelectItem value="10000">10,000 Credits - $400.00</SelectItem>
+                        <SelectItem value="500">500 Credits - GH₵ 150.00</SelectItem>
+                        <SelectItem value="1000">1,000 Credits - GH₵ 294.00</SelectItem>
+                        <SelectItem value="5000">5,000 Credits - GH₵ 1,350.00</SelectItem>
+                        <SelectItem value="10000">10,000 Credits - GH₵ 2,400.00</SelectItem>
                         <SelectItem value="custom">Custom Amount</SelectItem>
                       </SelectContent>
                     </Select>
@@ -468,7 +468,7 @@ export default function BillingPage() {
                         <TableCell className="font-medium text-green-600">
                           <div className="flex items-center">
                             <ArrowDown className="mr-1 h-4 w-4" />
-                            $49.00
+                            GH₵ 294.00
                           </div>
                         </TableCell>
                         <TableCell className="text-green-500">Completed</TableCell>
@@ -481,7 +481,7 @@ export default function BillingPage() {
                         <TableCell className="font-medium text-green-600">
                           <div className="flex items-center">
                             <ArrowDown className="mr-1 h-4 w-4" />
-                            $29.00
+                            GH₵ 174.00
                           </div>
                         </TableCell>
                         <TableCell className="text-green-500">Completed</TableCell>
@@ -494,7 +494,7 @@ export default function BillingPage() {
                         <TableCell className="font-medium text-green-600">
                           <div className="flex items-center">
                             <ArrowDown className="mr-1 h-4 w-4" />
-                            $149.00
+                            GH₵ 894.00
                           </div>
                         </TableCell>
                         <TableCell className="text-green-500">Completed</TableCell>
@@ -507,7 +507,7 @@ export default function BillingPage() {
                         <TableCell className="font-medium text-red-600">
                           <div className="flex items-center">
                             <ArrowUp className="mr-1 h-4 w-4" />
-                            $25.00
+                            GH₵ 150.00
                           </div>
                         </TableCell>
                         <TableCell className="text-green-500">Completed</TableCell>
@@ -520,7 +520,7 @@ export default function BillingPage() {
                         <TableCell className="font-medium text-green-600">
                           <div className="flex items-center">
                             <ArrowDown className="mr-1 h-4 w-4" />
-                            $99.00
+                            GH₵ 594.00
                           </div>
                         </TableCell>
                         <TableCell className="text-green-500">Completed</TableCell>
@@ -533,7 +533,7 @@ export default function BillingPage() {
                         <TableCell className="font-medium text-green-600">
                           <div className="flex items-center">
                             <ArrowDown className="mr-1 h-4 w-4" />
-                            $149.00
+                            GH₵ 894.00
                           </div>
                         </TableCell>
                         <TableCell className="text-green-500">Completed</TableCell>
@@ -616,7 +616,7 @@ export default function BillingPage() {
                         <TableCell className="font-mono text-xs">INV-20250512</TableCell>
                         <TableCell>Receipt</TableCell>
                         <TableCell>SMS Credits Purchase</TableCell>
-                        <TableCell className="font-medium">$49.00</TableCell>
+                        <TableCell className="font-medium">GH₵ 294.00</TableCell>
                         <TableCell>
                           <Button variant="ghost" size="sm">
                             <Download className="h-4 w-4" />
@@ -628,7 +628,7 @@ export default function BillingPage() {
                         <TableCell className="font-mono text-xs">INV-20250508</TableCell>
                         <TableCell>Receipt</TableCell>
                         <TableCell>Voice Credits Purchase</TableCell>
-                        <TableCell className="font-medium">$29.00</TableCell>
+                        <TableCell className="font-medium">GH₵ 174.00</TableCell>
                         <TableCell>
                           <Button variant="ghost" size="sm">
                             <Download className="h-4 w-4" />
@@ -640,7 +640,7 @@ export default function BillingPage() {
                         <TableCell className="font-mono text-xs">INV-20250501</TableCell>
                         <TableCell>Invoice</TableCell>
                         <TableCell>Monthly Subscription - May 2025</TableCell>
-                        <TableCell className="font-medium">$149.00</TableCell>
+                        <TableCell className="font-medium">GH₵ 894.00</TableCell>
                         <TableCell>
                           <Button variant="ghost" size="sm">
                             <Download className="h-4 w-4" />
@@ -652,7 +652,7 @@ export default function BillingPage() {
                         <TableCell className="font-mono text-xs">RCT-20250501</TableCell>
                         <TableCell>Receipt</TableCell>
                         <TableCell>Monthly Subscription - May 2025</TableCell>
-                        <TableCell className="font-medium">$149.00</TableCell>
+                        <TableCell className="font-medium">GH₵ 894.00</TableCell>
                         <TableCell>
                           <Button variant="ghost" size="sm">
                             <Download className="h-4 w-4" />
@@ -664,7 +664,7 @@ export default function BillingPage() {
                         <TableCell className="font-mono text-xs">INV-20250415</TableCell>
                         <TableCell>Receipt</TableCell>
                         <TableCell>SMS Credits Purchase</TableCell>
-                        <TableCell className="font-medium">$99.00</TableCell>
+                        <TableCell className="font-medium">GH₵ 594.00</TableCell>
                         <TableCell>
                           <Button variant="ghost" size="sm">
                             <Download className="h-4 w-4" />
@@ -676,7 +676,7 @@ export default function BillingPage() {
                         <TableCell className="font-mono text-xs">INV-20250401</TableCell>
                         <TableCell>Invoice</TableCell>
                         <TableCell>Monthly Subscription - April 2025</TableCell>
-                        <TableCell className="font-medium">$149.00</TableCell>
+                        <TableCell className="font-medium">GH₵ 894.00</TableCell>
                         <TableCell>
                           <Button variant="ghost" size="sm">
                             <Download className="h-4 w-4" />
@@ -688,7 +688,7 @@ export default function BillingPage() {
                         <TableCell className="font-mono text-xs">RCT-20250401</TableCell>
                         <TableCell>Receipt</TableCell>
                         <TableCell>Monthly Subscription - April 2025</TableCell>
-                        <TableCell className="font-medium">$149.00</TableCell>
+                        <TableCell className="font-medium">GH₵ 894.00</TableCell>
                         <TableCell>
                           <Button variant="ghost" size="sm">
                             <Download className="h-4 w-4" />
