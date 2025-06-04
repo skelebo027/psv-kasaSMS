@@ -270,8 +270,8 @@ export default function HomePage() {
           </div>
           <div className="text-center mt-8">
             <p className="text-gray-600">
-              Pay-as-you-go rates: SMS from GH₵ 0.30 • Voice from GH₵ 0.60/min • Email from GH₵ 0.12 • WhatsApp from GH₵
-              0.90
+              Pay-as-you-go rates: SMS from GH₵ 0.030 • Voice from GH₵ 0.60/min • Email from GH₵ 0.12 • WhatsApp from
+              GH₵ 0.50
             </p>
           </div>
         </div>
