@@ -28,11 +28,22 @@ export default function LoginPage() {
       // Simulate login - replace with actual authentication
       await new Promise((resolve) => setTimeout(resolve, 1000))
 
-      if (email === "admin@kasasms.com" && password === "admin") {
+      // Super Admin access
+      if (email === "philip@philangie.com" && password === "Nyameky3@85!") {
+        localStorage.setItem("userRole", "superadmin")
+        localStorage.setItem("userEmail", email)
+        router.push("/dashboard/admin")
+      } else if (email === "admin@kasasms.com" && password === "admin") {
+        localStorage.setItem("userRole", "admin")
+        localStorage.setItem("userEmail", email)
         router.push("/dashboard/admin")
       } else if (email === "reseller@kasasms.com" && password === "reseller") {
+        localStorage.setItem("userRole", "reseller")
+        localStorage.setItem("userEmail", email)
         router.push("/reseller")
       } else {
+        localStorage.setItem("userRole", "customer")
+        localStorage.setItem("userEmail", email)
         router.push("/dashboard")
       }
     } catch (err) {
