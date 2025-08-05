@@ -8,16 +8,16 @@ import { Toaster } from "@/components/ui/toaster"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "KasaSMS - SMS & Communication Platform",
-  description: "Complete SMS, USSD, Voice, and WhatsApp communication platform",
+  title: "KasaSMS Platform",
+  description: "A comprehensive SMS, Voice, Email, WhatsApp, and USSD platform.",
     generator: 'v0.dev'
 }
 
 export default function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode
-}) {
+}>) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>

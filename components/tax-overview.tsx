@@ -14,7 +14,7 @@ import {
   Cell,
   Legend,
 } from "recharts"
-import { CalendarIcon, BarChart3 } from "lucide-react"
+import { CalendarIcon, BarChart3, DollarSign, Percent, TrendingUp, FileWarning } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
@@ -43,15 +43,45 @@ export function TaxOverview() {
   const [date, setDate] = useState<Date | undefined>(new Date())
 
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">Total Tax Collected</CardTitle>
-          <span className="text-muted-foreground text-sm">$0.00</span>
+          <DollarSign className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">$0.00</div>
-          <p className="text-xs text-muted-foreground">No tax collected yet.</p>
+          <p className="text-xs text-muted-foreground">No tax collected yet</p>
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardTitle className="text-sm font-medium">Average Tax Rate</CardTitle>
+          <Percent className="h-4 w-4 text-muted-foreground" />
+        </CardHeader>
+        <CardContent>
+          <div className="text-2xl font-bold">0%</div>
+          <p className="text-xs text-muted-foreground">No transactions to calculate</p>
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardTitle className="text-sm font-medium">Tax Trends</CardTitle>
+          <TrendingUp className="h-4 w-4 text-muted-foreground" />
+        </CardHeader>
+        <CardContent>
+          <div className="text-2xl font-bold">No Data</div>
+          <p className="text-xs text-muted-foreground">No historical data available</p>
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardTitle className="text-sm font-medium">Compliance Status</CardTitle>
+          <FileWarning className="h-4 w-4 text-muted-foreground" />
+        </CardHeader>
+        <CardContent>
+          <div className="text-2xl font-bold">Unknown</div>
+          <p className="text-xs text-muted-foreground">No compliance checks performed</p>
         </CardContent>
       </Card>
       <Card>

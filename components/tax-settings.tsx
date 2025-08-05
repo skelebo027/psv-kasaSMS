@@ -15,6 +15,7 @@ import { useToast } from "@/hooks/use-toast"
 import { z } from "zod"
 import { useForm, zodResolver } from "react-hook-form"
 import { useState } from "react"
+import { Textarea } from "@/components/ui/textarea"
 
 const generalFormSchema = z.object({
   companyName: z.string().min(2, {
@@ -36,6 +37,8 @@ const generalFormSchema = z.object({
   defaultTaxRate: z.string().refine((val) => !isNaN(Number(val)) && Number(val) >= 0 && Number(val) <= 100, {
     message: "Default Tax Rate must be a number between 0 and 100.",
   }),
+  taxExemptCountries: z.string().optional(),
+  taxNotes: z.string().optional(),
 })
 
 const rateFormSchema = z.object({
@@ -74,6 +77,8 @@ const defaultGeneral: GeneralFormValues = {
   autoCollect: true,
   primaryTaxRegion: "ghana",
   defaultTaxRate: "15",
+  taxExemptCountries: "US, CA",
+  taxNotes: "This is a tax note.",
 }
 
 const defaultRates: RateFormValues = {
@@ -272,6 +277,34 @@ export function TaxSettings() {
                       </SelectContent>
                     </Select>
                     <FormDescription>This is the default region for tax calculations.</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={generalForm.control}
+                name="taxExemptCountries"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Tax Exempt Countries (comma-separated ISO codes)</FormLabel>
+                    <FormControl>
+                      <Input placeholder="e.g., US, CA" {...field} />
+                    </FormControl>
+                    <FormDescription>Customers from these countries will not be charged tax.</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={generalForm.control}
+                name="taxNotes"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Tax Notes/Disclaimers</FormLabel>
+                    <FormControl>
+                      <Textarea placeholder="Add any tax-related notes or disclaimers here." {...field} />
+                    </FormControl>
+                    <FormDescription>These notes will appear on invoices and billing statements.</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}

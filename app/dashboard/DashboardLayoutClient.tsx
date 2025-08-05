@@ -19,6 +19,7 @@ import {
   Shield,
   PlusCircle,
   Bell,
+  User,
 } from "lucide-react"
 import { MainNav } from "@/components/main-nav"
 import { UserNav } from "@/components/user-nav"
@@ -82,6 +83,11 @@ const userSidebarNavItems = [
     title: "Documentation",
     href: "/dashboard/documentation",
     icon: <FileText className="mr-2 h-4 w-4" />,
+  },
+  {
+    title: "Profile",
+    href: "/dashboard/profile",
+    icon: <User className="mr-2 h-4 w-4" />,
   },
 ]
 
@@ -171,24 +177,18 @@ const resellerSidebarNavItems = [
   },
 ]
 
-interface DashboardLayoutProps {
-  children: React.ReactNode
-}
-
-export default function DashboardLayoutClient({ children }: DashboardLayoutProps) {
+export default function DashboardLayoutClient({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
-  const userRole = useUserRole()
+  const userRole = useUserRole() // This hook determines the role based on the path
 
   const getSidebarNavItems = (role: string) => {
-    switch (role) {
-      case "admin":
-        return adminSidebarNavItems
-      case "reseller":
-        return resellerSidebarNavItems
-      case "user":
-      default:
-        return userSidebarNavItems
+    if (pathname.startsWith("/dashboard/admin")) {
+      return adminSidebarNavItems
     }
+    if (pathname.startsWith("/reseller")) {
+      return resellerSidebarNavItems
+    }
+    return userSidebarNavItems
   }
 
   const currentNavItems = getSidebarNavItems(userRole)
@@ -199,7 +199,7 @@ export default function DashboardLayoutClient({ children }: DashboardLayoutProps
         <div className="container flex h-16 items-center justify-between py-4">
           {/* Dynamic Brand/Logo based on role */}
           <div className="flex items-center gap-2 mr-4">
-            {userRole === "reseller" ? (
+            {pathname.startsWith("/reseller") ? (
               <>
                 <MessageSquare className="h-6 w-6 text-purple-500" />
                 <span className="text-xl font-bold text-purple-500">YourBrandSMS</span>
@@ -219,7 +219,7 @@ export default function DashboardLayoutClient({ children }: DashboardLayoutProps
           <MainNav className="mx-6" />
 
           <div className="ml-auto flex items-center space-x-4">
-            {userRole === "reseller" && (
+            {pathname.startsWith("/reseller") && (
               <Button variant="outline" size="sm">
                 <PlusCircle className="mr-2 h-4 w-4" />
                 Add Credits
@@ -240,7 +240,9 @@ export default function DashboardLayoutClient({ children }: DashboardLayoutProps
               <Link key={index} href={item.href}>
                 <span
                   className={`group flex items-center rounded-md px-3 py-2 hover:bg-accent hover:text-accent-foreground ${
-                    pathname === item.href ? "bg-accent" : ""
+                    pathname === item.href || (item.href !== "/dashboard" && pathname.startsWith(item.href))
+                      ? "bg-accent"
+                      : ""
                   }`}
                 >
                   {item.icon}

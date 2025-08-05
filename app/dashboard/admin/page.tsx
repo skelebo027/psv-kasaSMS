@@ -2,24 +2,14 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import {
-  BarChart3,
-  Bell,
-  CreditCard,
-  MessageSquare,
-  Settings,
-  Users,
-  Wallet,
-  Activity,
-  DollarSign,
-  Mail,
-  Phone,
-} from "lucide-react"
+import { BarChart3, Bell, CreditCard, MessageSquare, Settings, Users, Wallet, Mail, Phone } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { UserNav } from "@/components/user-nav"
 import { MainNav } from "@/components/main-nav"
+import { Overview } from "@/components/overview"
+import { RecentSales } from "@/components/recent-sales"
 
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("overview")
@@ -159,32 +149,32 @@ export default function AdminDashboard() {
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Active Services</CardTitle>
-                <Activity className="h-4 w-4 text-muted-foreground" />
+                <CardTitle className="text-sm font-medium">Active Gateways</CardTitle>
+                <MessageSquare className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{activeServices}</div>
-                <p className="text-xs text-muted-foreground">Currently operational</p>
+                <div className="text-2xl font-bold">0</div>
+                <p className="text-xs text-muted-foreground">No active gateways</p>
               </CardContent>
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
-                <DollarSign className="h-4 w-4 text-muted-foreground" />
+                <CreditCard className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">GH₵ {totalRevenue.toFixed(2)}</div>
+                <div className="text-2xl font-bold">$0.00</div>
                 <p className="text-xs text-muted-foreground">Platform-wide earnings</p>
               </CardContent>
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Pending Approvals</CardTitle>
-                <Bell className="h-4 w-4 text-muted-foreground" />
+                <CardTitle className="text-sm font-medium">System Settings</CardTitle>
+                <Settings className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{pendingApprovals}</div>
-                <p className="text-xs text-muted-foreground">Actions awaiting review</p>
+                <div className="text-2xl font-bold">Up-to-date</div>
+                <p className="text-xs text-muted-foreground">All configurations are current</p>
               </CardContent>
             </Card>
           </div>
@@ -195,50 +185,17 @@ export default function AdminDashboard() {
                 <CardDescription>Key metrics and performance indicators.</CardDescription>
               </CardHeader>
               <CardContent className="pl-2">
-                <div className="h-[300px] w-full">
-                  <div className="flex h-full w-full items-center justify-center rounded-md border border-dashed">
-                    <div className="flex flex-col items-center gap-2 text-center">
-                      <BarChart3 className="h-8 w-8 text-muted-foreground" />
-                      <div className="text-sm text-muted-foreground">System performance charts will appear here</div>
-                    </div>
-                  </div>
-                </div>
+                <Overview />
               </CardContent>
             </Card>
             <Card className="col-span-3">
               <CardHeader>
-                <CardTitle>Recent Admin Activity</CardTitle>
-                <CardDescription>No recent activities to display.</CardDescription>
+                <CardTitle>Recent Admin Actions</CardTitle>
+                <CardDescription>No recent admin actions.</CardDescription>
               </CardHeader>
               <CardContent>
-                {recentActivities.length === 0 ? (
-                  <div className="flex h-[200px] items-center justify-center text-muted-foreground">
-                    <div className="text-center">
-                      <p className="text-sm font-medium">No recent admin activity</p>
-                      <p className="text-xs">Admin actions will appear here.</p>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="space-y-4">
-                    {recentActivities.map((activity) => (
-                      <div key={activity.id} className="flex items-center">
-                        <div className="flex h-9 w-9 items-center justify-center rounded-full bg-orange-100">
-                          <Activity className="h-5 w-5 text-orange-700" />
-                        </div>
-                        <div className="ml-4 space-y-1">
-                          <p className="text-sm font-medium leading-none">{activity.description}</p>
-                          <p className="text-sm text-muted-foreground">{activity.date}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
+                <RecentSales />
               </CardContent>
-              <CardFooter>
-                <Button variant="outline" className="w-full bg-transparent">
-                  View All Activities
-                </Button>
-              </CardFooter>
             </Card>
           </div>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">

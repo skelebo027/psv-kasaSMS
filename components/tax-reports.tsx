@@ -145,7 +145,7 @@ const withholdingTaxReportData = [
 ]
 
 export function TaxReports() {
-  const [date, setDate] = useState<Date | undefined>(new Date())
+  const [date, setDate] = useState<Date | undefined>(undefined)
   const [reportType, setReportType] = useState("vat")
   const { toast } = useToast()
 
@@ -166,54 +166,48 @@ export function TaxReports() {
           <CardDescription>Create detailed tax reports for specific periods.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            <div className="space-y-2">
-              <Label htmlFor="report-type">Report Type</Label>
-              <Select defaultValue="summary">
-                <SelectTrigger id="report-type">
-                  <SelectValue placeholder="Select report type" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="summary">Summary Report</SelectItem>
-                  <SelectItem value="detailed">Detailed Report</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="report-period">Reporting Period</Label>
-              <Select defaultValue="monthly">
-                <SelectTrigger id="report-period">
-                  <SelectValue placeholder="Select period" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="monthly">Monthly</SelectItem>
-                  <SelectItem value="quarterly">Quarterly</SelectItem>
-                  <SelectItem value="yearly">Yearly</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+          <div className="grid gap-2">
+            <Label htmlFor="report-type">Report Type</Label>
+            <Select defaultValue="summary" disabled>
+              <SelectTrigger id="report-type">
+                <SelectValue placeholder="Select report type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="summary">Summary Report</SelectItem>
+                <SelectItem value="detailed">Detailed Report</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
-          <Button className="w-full" onClick={handleGenerateReport}>
+
+          <div className="grid gap-2">
+            <Label htmlFor="report-period">Report Period</Label>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant={"outline"}
+                  className={cn("w-[280px] justify-start text-left font-normal", !date && "text-muted-foreground")}
+                  disabled
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {date ? format(date, "PPP") : <span>Pick a date</span>}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0">
+                <Calendar mode="single" selected={date} onSelect={setDate} initialFocus disabled />
+              </PopoverContent>
+            </Popover>
+          </div>
+
+          <Button className="w-full" onClick={handleGenerateReport} disabled>
             Generate Report
           </Button>
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Tax Reports</CardTitle>
-          <CardDescription>Generate and view your tax reports.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="flex h-[200px] items-center justify-center text-muted-foreground">
-            <div className="text-center">
-              <FileText className="h-8 w-8 mx-auto mb-2" />
-              <p className="text-sm font-medium">No tax reports available</p>
-              <p className="text-xs">Generated tax reports will appear here.</p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+      <div className="mt-8">
+        <h3 className="text-lg font-semibold">Generated Reports</h3>
+        <p className="text-sm text-muted-foreground mt-2">No reports have been generated yet.</p>
+      </div>
 
       <Card>
         <CardHeader>
@@ -441,11 +435,11 @@ export function TaxReports() {
           </Tabs>
         </CardContent>
         <CardFooter className="flex justify-between">
-          <Button variant="outline">
+          <Button variant="outline" disabled>
             <Download className="h-4 w-4 mr-2" />
             Export All
           </Button>
-          <Button>
+          <Button disabled>
             <FileText className="h-4 w-4 mr-2" />
             Generate New Report
           </Button>

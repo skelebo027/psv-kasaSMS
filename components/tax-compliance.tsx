@@ -1,22 +1,42 @@
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
-import { Scale } from "lucide-react"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Info } from "lucide-react"
 
 export function TaxCompliance() {
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Tax Compliance</CardTitle>
-        <CardDescription>Ensure your tax setup is compliant with regulations.</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <div className="flex h-[200px] items-center justify-center text-muted-foreground">
-          <div className="text-center">
-            <Scale className="h-8 w-8 mx-auto mb-2" />
-            <p className="text-sm font-medium">No compliance checks performed</p>
-            <p className="text-xs">Compliance status and recommendations will appear here.</p>
+    <div className="space-y-6">
+      <Card>
+        <CardHeader>
+          <CardTitle>Compliance Status Check</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="flex items-center space-x-2">
+            <Info className="h-5 w-5 text-blue-500" />
+            <p className="text-sm text-muted-foreground">
+              Last checked: Never. Click the button below to perform a compliance check.
+            </p>
           </div>
-        </div>
-      </CardContent>
-    </Card>
+          <Button disabled>Run Compliance Check</Button>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Compliance Issues</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-sm text-muted-foreground">No compliance issues found.</p>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Regulatory Updates</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-sm text-muted-foreground">No recent regulatory updates to display.</p>
+        </CardContent>
+      </Card>
+    </div>
   )
 }
