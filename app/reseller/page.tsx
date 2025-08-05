@@ -1,25 +1,10 @@
 "use client"
 
 import { useState } from "react"
-import Link from "next/link"
-import {
-  BarChart3,
-  Bell,
-  Briefcase,
-  CreditCard,
-  Globe,
-  MessageSquare,
-  Palette,
-  Percent,
-  PlusCircle,
-  Settings,
-  Users,
-} from "lucide-react"
+import { BarChart3, Briefcase, CreditCard, MessageSquare, Users } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { UserNav } from "@/components/user-nav"
-import { ResellerNav } from "@/components/reseller-nav"
 
 export default function ResellerDashboard() {
   const [activeTab, setActiveTab] = useState("overview")
@@ -125,288 +110,214 @@ export default function ResellerDashboard() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col">
-      <div className="border-b">
-        <div className="flex h-16 items-center px-4">
-          <div className="flex items-center gap-2 mr-4">
-            <MessageSquare className="h-6 w-6 text-purple-500" />
-            <span className="text-xl font-bold text-purple-500">YourBrandSMS</span>
-            <div className="bg-purple-100 text-purple-800 px-2 py-1 rounded text-xs font-medium">Reseller Portal</div>
-          </div>
-          <ResellerNav className="mx-6" />
-          <div className="ml-auto flex items-center space-x-4">
-            <Button variant="outline" size="sm">
-              <PlusCircle className="mr-2 h-4 w-4" />
-              Add Credits
-            </Button>
-            <Bell className="h-5 w-5 cursor-pointer" />
-            <UserNav />
-          </div>
-        </div>
+    <div className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-bold">Reseller Dashboard</h1>
+        <Tabs defaultValue="overview" className="w-[400px]" onValueChange={setActiveTab}>
+          <TabsList>
+            <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="clients">Clients</TabsTrigger>
+            <TabsTrigger value="revenue">Revenue</TabsTrigger>
+          </TabsList>
+        </Tabs>
       </div>
-      <div className="grid flex-1 md:grid-cols-[220px_1fr]">
-        <aside className="hidden border-r bg-gray-50 md:block">
-          <div className="flex h-full flex-col gap-2 p-4">
-            <Link href="/reseller">
-              <Button variant="ghost" className="w-full justify-start gap-2">
-                <BarChart3 className="h-5 w-5" />
-                Dashboard
-              </Button>
-            </Link>
-            <Link href="/reseller/clients">
-              <Button variant="ghost" className="w-full justify-start gap-2">
-                <Users className="h-5 w-5" />
-                Clients
-              </Button>
-            </Link>
-            <Link href="/reseller/services">
-              <Button variant="ghost" className="w-full justify-start gap-2">
-                <MessageSquare className="h-5 w-5" />
-                Services
-              </Button>
-            </Link>
-            <Link href="/reseller/pricing">
-              <Button variant="ghost" className="w-full justify-start gap-2">
-                <Percent className="h-5 w-5" />
-                Pricing
-              </Button>
-            </Link>
-            <Link href="/reseller/branding">
-              <Button variant="ghost" className="w-full justify-start gap-2">
-                <Palette className="h-5 w-5" />
-                Branding
-              </Button>
-            </Link>
-            <Link href="/reseller/domain">
-              <Button variant="ghost" className="w-full justify-start gap-2">
-                <Globe className="h-5 w-5" />
-                Domain
-              </Button>
-            </Link>
-            <Link href="/reseller/billing">
-              <Button variant="ghost" className="w-full justify-start gap-2">
-                <CreditCard className="h-5 w-5" />
-                Billing
-              </Button>
-            </Link>
-            <Link href="/reseller/settings">
-              <Button variant="ghost" className="w-full justify-start gap-2">
-                <Settings className="h-5 w-5" />
-                Settings
-              </Button>
-            </Link>
-          </div>
-        </aside>
-        <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
-          <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-bold">Reseller Dashboard</h1>
-            <Tabs defaultValue="overview" className="w-[400px]" onValueChange={setActiveTab}>
-              <TabsList>
-                <TabsTrigger value="overview">Overview</TabsTrigger>
-                <TabsTrigger value="clients">Clients</TabsTrigger>
-                <TabsTrigger value="revenue">Revenue</TabsTrigger>
-              </TabsList>
-            </Tabs>
-          </div>
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
-                <CreditCard className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">${totalRevenue.toFixed(2)}</div>
-                <p className="text-xs text-muted-foreground">{totalRevenueChange}</p>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Active Clients</CardTitle>
-                <Users className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{activeClients}</div>
-                <p className="text-xs text-muted-foreground">{activeClientsChange}</p>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Messages Sent</CardTitle>
-                <MessageSquare className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{messagesSent}</div>
-                <p className="text-xs text-muted-foreground">{messagesSentChange}</p>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Commission</CardTitle>
-                <Briefcase className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">${commission.toFixed(2)}</div>
-                <p className="text-xs text-muted-foreground">{commissionChange}</p>
-              </CardContent>
-            </Card>
-          </div>
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-            <Card className="col-span-4">
-              <CardHeader>
-                <CardTitle>Monthly Revenue</CardTitle>
-                <CardDescription>Your revenue and commission over time</CardDescription>
-              </CardHeader>
-              <CardContent className="pl-2">
-                <div className="h-[300px] w-full">
-                  <div className="flex h-full w-full items-center justify-center rounded-md border border-dashed">
-                    <div className="flex flex-col items-center gap-2 text-center">
-                      <BarChart3 className="h-8 w-8 text-muted-foreground" />
-                      <div className="text-sm text-muted-foreground">Revenue chart will appear here</div>
-                    </div>
-                  </div>
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
+            <CreditCard className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">${totalRevenue.toFixed(2)}</div>
+            <p className="text-xs text-muted-foreground">{totalRevenueChange}</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Active Clients</CardTitle>
+            <Users className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{activeClients}</div>
+            <p className="text-xs text-muted-foreground">{activeClientsChange}</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Messages Sent</CardTitle>
+            <MessageSquare className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{messagesSent}</div>
+            <p className="text-xs text-muted-foreground">{messagesSentChange}</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Commission</CardTitle>
+            <Briefcase className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">${commission.toFixed(2)}</div>
+            <p className="text-xs text-muted-foreground">{commissionChange}</p>
+          </CardContent>
+        </Card>
+      </div>
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+        <Card className="col-span-4">
+          <CardHeader>
+            <CardTitle>Monthly Revenue</CardTitle>
+            <CardDescription>Your revenue and commission over time</CardDescription>
+          </CardHeader>
+          <CardContent className="pl-2">
+            <div className="h-[300px] w-full">
+              <div className="flex h-full w-full items-center justify-center rounded-md border border-dashed">
+                <div className="flex flex-col items-center gap-2 text-center">
+                  <BarChart3 className="h-8 w-8 text-muted-foreground" />
+                  <div className="text-sm text-muted-foreground">Revenue chart will appear here</div>
                 </div>
-              </CardContent>
-            </Card>
-            <Card className="col-span-3">
-              <CardHeader>
-                <CardTitle>Recent Clients</CardTitle>
-                <CardDescription>No recent clients to display.</CardDescription>
-              </CardHeader>
-              <CardContent>
-                {recentClients.length > 0 ? (
-                  <div className="space-y-4">
-                    {recentClients.map((client, index) => (
-                      <div key={index} className="flex items-center">
-                        <div className="flex h-9 w-9 items-center justify-center rounded-full bg-purple-100">
-                          <Users className="h-5 w-5 text-purple-700" />
-                        </div>
-                        <div className="ml-4 space-y-1">
-                          <p className="text-sm font-medium leading-none">{client.name}</p>
-                          <p className="text-sm text-muted-foreground">Added on {client.addedOn}</p>
-                        </div>
-                        <div className="ml-auto font-medium">{client.amount}</div>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="flex h-[200px] items-center justify-center text-muted-foreground">
-                    <div className="text-center">
-                      <p className="text-sm font-medium">No recent clients</p>
-                      <p className="text-xs">New clients will appear here.</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        <Card className="col-span-3">
+          <CardHeader>
+            <CardTitle>Recent Clients</CardTitle>
+            <CardDescription>No recent clients to display.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            {recentClients.length > 0 ? (
+              <div className="space-y-4">
+                {recentClients.map((client, index) => (
+                  <div key={index} className="flex items-center">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-purple-100">
+                      <Users className="h-5 w-5 text-purple-700" />
                     </div>
-                  </div>
-                )}
-              </CardContent>
-              <CardFooter>
-                <Button variant="outline" className="w-full bg-transparent">
-                  View All Clients
-                </Button>
-              </CardFooter>
-            </Card>
-          </div>
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            <Card>
-              <CardHeader>
-                <CardTitle>Quick Actions</CardTitle>
-              </CardHeader>
-              <CardContent className="grid gap-2">
-                <Button className="w-full bg-purple-500 hover:bg-purple-600">
-                  <Users className="mr-2 h-4 w-4" />
-                  Add New Client
-                </Button>
-                <Button variant="outline" className="w-full bg-transparent">
-                  <MessageSquare className="mr-2 h-4 w-4" />
-                  Create Campaign
-                </Button>
-                <Button variant="outline" className="w-full bg-transparent">
-                  <CreditCard className="mr-2 h-4 w-4" />
-                  Purchase Credits
-                </Button>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader>
-                <CardTitle>Service Status</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {serviceStatus.length === 0 ? (
-                  <div className="flex h-[200px] items-center justify-center text-muted-foreground">
-                    <div className="text-center">
-                      <p className="text-sm font-medium">No service status available</p>
-                      <p className="text-xs">Service health will be displayed here.</p>
+                    <div className="ml-4 space-y-1">
+                      <p className="text-sm font-medium leading-none">{client.name}</p>
+                      <p className="text-sm text-muted-foreground">Added on {client.addedOn}</p>
                     </div>
+                    <div className="ml-auto font-medium">{client.amount}</div>
                   </div>
-                ) : (
-                  serviceStatus.map((service, index) => (
-                    <div key={index} className="flex items-center justify-between">
-                      <div className="flex items-center space-x-2">
-                        {typeof service.icon === "string" ? (
-                          getServiceIcon(service.icon)
-                        ) : (
-                          <service.icon className={`h-5 w-5 text-${service.color}-500`} />
-                        )}
-                        <span>{service.name}</span>
-                      </div>
-                      <span
-                        className={`inline-flex items-center rounded-full bg-${service.color}-100 px-2.5 py-0.5 text-xs font-medium text-${service.color}-800`}
-                      >
-                        {service.status}
-                      </span>
-                    </div>
-                  ))
-                )}
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader>
-                <CardTitle>Reseller Plan</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="rounded-md border p-4">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="font-medium">No Plan Selected</p>
-                      <p className="text-sm text-muted-foreground">Please select a plan</p>
-                    </div>
-                    <div className="text-right">
-                      <p className="font-medium">N/A</p>
-                      <p className="text-sm text-muted-foreground">Next billing: N/A</p>
-                    </div>
-                  </div>
-                  <div className="mt-4">
-                    <p className="text-sm font-medium">Features:</p>
-                    <ul className="mt-2 space-y-1 text-sm text-muted-foreground">
-                      <li className="flex items-center">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          className="mr-2 h-4 w-4 text-gray-400"
-                        >
-                          <circle cx="12" cy="12" r="10" />
-                          <path d="m15 9-6 6" />
-                          <path d="m9 9 6 6" />
-                        </svg>
-                        No features available
-                      </li>
-                    </ul>
-                  </div>
-                  <div className="mt-4 flex justify-end">
-                    <Button variant="outline" size="sm">
-                      Upgrade Plan
-                    </Button>
-                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="flex h-[200px] items-center justify-center text-muted-foreground">
+                <div className="text-center">
+                  <p className="text-sm font-medium">No recent clients</p>
+                  <p className="text-xs">New clients will appear here.</p>
                 </div>
-              </CardContent>
-            </Card>
-          </div>
-        </main>
+              </div>
+            )}
+          </CardContent>
+          <CardFooter>
+            <Button variant="outline" className="w-full bg-transparent">
+              View All Clients
+            </Button>
+          </CardFooter>
+        </Card>
+      </div>
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <Card>
+          <CardHeader>
+            <CardTitle>Quick Actions</CardTitle>
+          </CardHeader>
+          <CardContent className="grid gap-2">
+            <Button className="w-full bg-purple-500 hover:bg-purple-600">
+              <Users className="mr-2 h-4 w-4" />
+              Add New Client
+            </Button>
+            <Button variant="outline" className="w-full bg-transparent">
+              <MessageSquare className="mr-2 h-4 w-4" />
+              Create Campaign
+            </Button>
+            <Button variant="outline" className="w-full bg-transparent">
+              <CreditCard className="mr-2 h-4 w-4" />
+              Purchase Credits
+            </Button>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle>Service Status</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {serviceStatus.length === 0 ? (
+              <div className="flex h-[200px] items-center justify-center text-muted-foreground">
+                <div className="text-center">
+                  <p className="text-sm font-medium">No service status available</p>
+                  <p className="text-xs">Service health will be displayed here.</p>
+                </div>
+              </div>
+            ) : (
+              serviceStatus.map((service, index) => (
+                <div key={index} className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    {typeof service.icon === "string" ? (
+                      getServiceIcon(service.icon)
+                    ) : (
+                      <service.icon className={`h-5 w-5 text-${service.color}-500`} />
+                    )}
+                    <span>{service.name}</span>
+                  </div>
+                  <span
+                    className={`inline-flex items-center rounded-full bg-${service.color}-100 px-2.5 py-0.5 text-xs font-medium text-${service.color}-800`}
+                  >
+                    {service.status}
+                  </span>
+                </div>
+              ))
+            )}
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle>Reseller Plan</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="rounded-md border p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="font-medium">No Plan Selected</p>
+                  <p className="text-sm text-muted-foreground">Please select a plan</p>
+                </div>
+                <div className="text-right">
+                  <p className="font-medium">N/A</p>
+                  <p className="text-sm text-muted-foreground">Next billing: N/A</p>
+                </div>
+              </div>
+              <div className="mt-4">
+                <p className="text-sm font-medium">Features:</p>
+                <ul className="mt-2 space-y-1 text-sm text-muted-foreground">
+                  <li className="flex items-center">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="mr-2 h-4 w-4 text-gray-400"
+                    >
+                      <circle cx="12" cy="12" r="10" />
+                      <path d="m15 9-6 6" />
+                      <path d="m9 9 6 6" />
+                    </svg>
+                    No features available
+                  </li>
+                </ul>
+              </div>
+              <div className="mt-4 flex justify-end">
+                <Button variant="outline" size="sm">
+                  Upgrade Plan
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   )

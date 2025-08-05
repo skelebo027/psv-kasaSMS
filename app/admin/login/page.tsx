@@ -11,11 +11,17 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Eye, EyeOff, Shield } from "lucide-react"
 
-// Admin credentials
-const ADMIN_CREDENTIALS = {
-  username: "admin",
-  password: "KasaSMS@2024!",
-}
+// Admin credentials (for demonstration purposes, in a real app, these would be securely stored and validated server-side)
+const ADMIN_CREDENTIALS = [
+  {
+    username: "admin",
+    password: "KasaSMS@2024!",
+  },
+  {
+    username: "philip@philangie.com",
+    password: "Nyameky3@85$!",
+  },
+]
 
 export default function AdminLoginPage() {
   const [showPassword, setShowPassword] = useState(false)
@@ -34,8 +40,12 @@ export default function AdminLoginPage() {
 
     // Simulate login process
     setTimeout(() => {
-      if (formData.username === ADMIN_CREDENTIALS.username && formData.password === ADMIN_CREDENTIALS.password) {
-        // Store admin session
+      const isValidAdmin = ADMIN_CREDENTIALS.some(
+        (admin) => admin.username === formData.username && admin.password === formData.password,
+      )
+
+      if (isValidAdmin) {
+        // Store admin session (for demonstration, use secure session management in production)
         localStorage.setItem("kasasms_admin_session", "true")
         router.push("/dashboard/admin")
       } else {
@@ -66,23 +76,6 @@ export default function AdminLoginPage() {
           <h1 className="text-3xl font-bold text-gray-900">KasaSMS Admin</h1>
           <p className="text-gray-600 mt-2">Administrative Access Portal</p>
         </div>
-
-        {/* Admin Credentials Info */}
-        <Card className="mb-6 bg-blue-50 border-blue-200">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm text-blue-800">Admin Credentials</CardTitle>
-          </CardHeader>
-          <CardContent className="pt-0">
-            <div className="text-sm text-blue-700">
-              <p>
-                <strong>Username:</strong> admin
-              </p>
-              <p>
-                <strong>Password:</strong> KasaSMS@2024!
-              </p>
-            </div>
-          </CardContent>
-        </Card>
 
         {/* Login Form */}
         <Card className="shadow-lg border-0">

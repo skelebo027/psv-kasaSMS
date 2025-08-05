@@ -1,19 +1,21 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+import { Scale } from "lucide-react"
 
 export function TaxCompliance() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Tax Compliance Status</CardTitle>
-        <CardDescription>Overview of your tax compliance status.</CardDescription>
+        <CardTitle>Tax Compliance</CardTitle>
+        <CardDescription>Ensure your tax setup is compliant with regulations.</CardDescription>
       </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="flex items-center gap-2">
-          <p className="text-muted-foreground">Overall Status:</p>
-          <Badge variant="secondary">Not Configured</Badge>
+      <CardContent>
+        <div className="flex h-[200px] items-center justify-center text-muted-foreground">
+          <div className="text-center">
+            <Scale className="h-8 w-8 mx-auto mb-2" />
+            <p className="text-sm font-medium">No compliance checks performed</p>
+            <p className="text-xs">Compliance status and recommendations will appear here.</p>
+          </div>
         </div>
-        <div className="text-center text-muted-foreground py-8">No compliance checks performed.</div>
       </CardContent>
     </Card>
   )

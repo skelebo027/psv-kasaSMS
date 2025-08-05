@@ -202,17 +202,16 @@ export function TaxReports() {
       <Card>
         <CardHeader>
           <CardTitle>Tax Reports</CardTitle>
-          <CardDescription>Generate and download tax reports for various periods.</CardDescription>
+          <CardDescription>Generate and view your tax reports.</CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex items-center justify-between">
-            <p className="text-muted-foreground">No reports generated yet.</p>
-            <Button variant="outline" disabled>
-              <Download className="h-4 w-4 mr-2" />
-              Generate Report
-            </Button>
+        <CardContent>
+          <div className="flex h-[200px] items-center justify-center text-muted-foreground">
+            <div className="text-center">
+              <FileText className="h-8 w-8 mx-auto mb-2" />
+              <p className="text-sm font-medium">No tax reports available</p>
+              <p className="text-xs">Generated tax reports will appear here.</p>
+            </div>
           </div>
-          <div className="text-center text-muted-foreground py-8">No tax reports to display.</div>
         </CardContent>
       </Card>
 

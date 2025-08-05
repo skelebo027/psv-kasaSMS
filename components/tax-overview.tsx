@@ -1,6 +1,6 @@
 "use client"
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import {
   BarChart,
   Bar,
@@ -14,7 +14,7 @@ import {
   Cell,
   Legend,
 } from "recharts"
-import { CalendarIcon } from "lucide-react"
+import { CalendarIcon, BarChart3 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
@@ -221,6 +221,22 @@ export function TaxOverview() {
         </CardHeader>
         <CardContent>
           <div className="text-center text-muted-foreground py-8">No recent tax activity.</div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Tax Overview</CardTitle>
+          <CardDescription>Summary of your tax liabilities and payments.</CardDescription>
+        </CardHeader>
+        <CardContent className="pl-2">
+          <div className="h-[300px] flex items-center justify-center text-muted-foreground">
+            <div className="text-center">
+              <BarChart3 className="h-8 w-8 mx-auto mb-2" />
+              <p className="text-sm font-medium">No tax overview data available</p>
+              <p className="text-xs">Tax data will appear here once configured.</p>
+            </div>
+          </div>
         </CardContent>
       </Card>
     </div>
