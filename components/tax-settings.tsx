@@ -1,5 +1,7 @@
 "use client"
 
+import { Label } from "@/components/ui/label"
+
 import { useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -14,7 +16,7 @@ import { Switch } from "@/components/ui/switch"
 import { Separator } from "@/components/ui/separator"
 import { Badge } from "@/components/ui/badge"
 import { PlusCircle, Trash2 } from "lucide-react"
-import { toast } from "@/components/ui/use-toast"
+import { useToast } from "@/hooks/use-toast"
 
 const generalFormSchema = z.object({
   companyName: z.string().min(2, {
@@ -30,6 +32,12 @@ const generalFormSchema = z.object({
     required_error: "Please select a fiscal year start.",
   }),
   autoCollect: z.boolean().default(true),
+  primaryTaxRegion: z.string({
+    required_error: "Please select a primary tax region.",
+  }),
+  defaultTaxRate: z.string().refine((val) => !isNaN(Number(val)) && Number(val) >= 0 && Number(val) <= 100, {
+    message: "Default Tax Rate must be a number between 0 and 100.",
+  }),
 })
 
 const rateFormSchema = z.object({
@@ -66,6 +74,8 @@ const defaultGeneral: GeneralFormValues = {
   taxOffice: "Central Tax Office",
   fiscalYear: "january",
   autoCollect: true,
+  primaryTaxRegion: "ghana",
+  defaultTaxRate: "15",
 }
 
 const defaultRates: RateFormValues = {
@@ -96,6 +106,7 @@ const defaultRates: RateFormValues = {
 
 export function TaxSettings() {
   const [activeTab, setActiveTab] = useState("general")
+  const { toast } = useToast()
 
   const generalForm = useForm<GeneralFormValues>({
     resolver: zodResolver(generalFormSchema),
@@ -136,6 +147,13 @@ export function TaxSettings() {
     )
   }
 
+  const handleSaveSettings = () => {
+    toast({
+      title: "Settings Saved",
+      description: "Your tax settings have been updated.",
+    })
+  }
+
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
       <TabsList>
@@ -148,116 +166,118 @@ export function TaxSettings() {
         <Card>
           <CardHeader>
             <CardTitle>General Tax Settings</CardTitle>
-            <CardDescription>Configure your company's tax information and general tax settings.</CardDescription>
+            <CardDescription>Configure how taxes are applied to your services.</CardDescription>
           </CardHeader>
-          <CardContent>
-            <Form {...generalForm}>
-              <form onSubmit={generalForm.handleSubmit(onGeneralSubmit)} className="space-y-8">
-                <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                  <FormField
-                    control={generalForm.control}
-                    name="companyName"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Company Name</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Enter company name" {...field} />
-                        </FormControl>
-                        <FormDescription>
-                          The legal name of your company as registered with tax authorities.
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={generalForm.control}
-                    name="taxId"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Tax ID / VAT Number</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Enter tax ID" {...field} />
-                        </FormControl>
-                        <FormDescription>Your company's tax identification number.</FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={generalForm.control}
-                    name="taxOffice"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Tax Office</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Enter tax office" {...field} />
-                        </FormControl>
-                        <FormDescription>The tax office where you file your returns.</FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={generalForm.control}
-                    name="fiscalYear"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Fiscal Year Start</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select fiscal year start" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            <SelectItem value="january">January</SelectItem>
-                            <SelectItem value="february">February</SelectItem>
-                            <SelectItem value="march">March</SelectItem>
-                            <SelectItem value="april">April</SelectItem>
-                            <SelectItem value="may">May</SelectItem>
-                            <SelectItem value="june">June</SelectItem>
-                            <SelectItem value="july">July</SelectItem>
-                            <SelectItem value="august">August</SelectItem>
-                            <SelectItem value="september">September</SelectItem>
-                            <SelectItem value="october">October</SelectItem>
-                            <SelectItem value="november">November</SelectItem>
-                            <SelectItem value="december">December</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <FormDescription>The month when your fiscal year begins.</FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-
-                <Separator />
-
-                <div className="space-y-4">
-                  <h3 className="text-lg font-medium">Tax Collection Settings</h3>
-                  <FormField
-                    control={generalForm.control}
-                    name="autoCollect"
-                    render={({ field }) => (
-                      <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                        <div className="space-y-0.5">
-                          <FormLabel className="text-base">Automatic Tax Collection</FormLabel>
-                          <FormDescription>
-                            Automatically calculate and collect taxes on all transactions.
-                          </FormDescription>
-                        </div>
-                        <FormControl>
-                          <Switch checked={field.value} onCheckedChange={field.onChange} />
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
-                </div>
-
-                <Button type="submit">Save Settings</Button>
-              </form>
-            </Form>
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="tax-region">Primary Tax Region</Label>
+              <Select defaultValue="ghana">
+                <SelectTrigger id="tax-region">
+                  <SelectValue placeholder="Select region" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="ghana">Ghana</SelectItem>
+                  <SelectItem value="nigeria">Nigeria</SelectItem>
+                  <SelectItem value="kenya">Kenya</SelectItem>
+                </SelectContent>
+              </Select>
+              <p className="text-xs text-muted-foreground">This is the default region for tax calculations.</p>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="tax-rate">Default Tax Rate (%)</Label>
+              <Input id="tax-rate" type="number" placeholder="e.g., 15" />
+              <p className="text-xs text-muted-foreground">
+                This rate will be applied to services unless overridden by specific rules.
+              </p>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Switch id="enable-tax" />
+              <Label htmlFor="enable-tax">Enable Tax Collection</Label>
+            </div>
+            <Separator />
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+              <FormField
+                control={generalForm.control}
+                name="companyName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Company Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Enter company name" {...field} />
+                    </FormControl>
+                    <FormDescription>
+                      The legal name of your company as registered with tax authorities.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={generalForm.control}
+                name="taxId"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Tax ID / VAT Number</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Enter tax ID" {...field} />
+                    </FormControl>
+                    <FormDescription>Your company's tax identification number.</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={generalForm.control}
+                name="taxOffice"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Tax Office</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Enter tax office" {...field} />
+                    </FormControl>
+                    <FormDescription>The tax office where you file your returns.</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={generalForm.control}
+                name="fiscalYear"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Fiscal Year Start</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select fiscal year start" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="january">January</SelectItem>
+                        <SelectItem value="february">February</SelectItem>
+                        <SelectItem value="march">March</SelectItem>
+                        <SelectItem value="april">April</SelectItem>
+                        <SelectItem value="may">May</SelectItem>
+                        <SelectItem value="june">June</SelectItem>
+                        <SelectItem value="july">July</SelectItem>
+                        <SelectItem value="august">August</SelectItem>
+                        <SelectItem value="september">September</SelectItem>
+                        <SelectItem value="october">October</SelectItem>
+                        <SelectItem value="november">November</SelectItem>
+                        <SelectItem value="december">December</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormDescription>The month when your fiscal year begins.</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <CardFooter>
+              <Button type="button" onClick={handleSaveSettings}>
+                Save Settings
+              </Button>
+            </CardFooter>
           </CardContent>
         </Card>
       </TabsContent>
@@ -369,7 +389,7 @@ export function TaxSettings() {
                   </div>
                 ))}
 
-                <Button type="button" variant="outline" size="sm" className="mt-2" onClick={addTaxRate}>
+                <Button type="button" variant="outline" size="sm" className="mt-2 bg-transparent" onClick={addTaxRate}>
                   <PlusCircle className="h-4 w-4 mr-2" />
                   Add Tax Rate
                 </Button>
@@ -419,7 +439,7 @@ export function TaxSettings() {
                     </div>
                   </div>
                 </div>
-                <Button variant="outline" size="sm" className="mt-4">
+                <Button variant="outline" size="sm" className="mt-4 bg-transparent">
                   <PlusCircle className="h-4 w-4 mr-2" />
                   Add Customer Exemption
                 </Button>
@@ -453,7 +473,7 @@ export function TaxSettings() {
                     </div>
                   </div>
                 </div>
-                <Button variant="outline" size="sm" className="mt-4">
+                <Button variant="outline" size="sm" className="mt-4 bg-transparent">
                   <PlusCircle className="h-4 w-4 mr-2" />
                   Add Service Exemption
                 </Button>

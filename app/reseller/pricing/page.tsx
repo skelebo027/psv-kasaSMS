@@ -24,9 +24,46 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Switch } from "@/components/ui/switch"
 import { UserNav } from "@/components/user-nav"
 import { ResellerNav } from "@/components/reseller-nav"
+import { useToast } from "@/hooks/use-toast"
 
 export default function PricingPage() {
   const [showAdvanced, setShowAdvanced] = useState(false)
+  const { toast } = useToast()
+
+  const handleSavePlan = (planName: string) => {
+    toast({
+      title: "Plan Saved",
+      description: `${planName} pricing has been updated.`,
+    })
+  }
+
+  const handleSaveServicePricing = () => {
+    toast({
+      title: "Service Pricing Saved",
+      description: "Individual service pricing has been updated.",
+    })
+  }
+
+  const handleAddPromotion = () => {
+    toast({
+      title: "Promotion Added",
+      description: "A new promotion has been created.",
+    })
+  }
+
+  const handleSavePricingStrategy = () => {
+    toast({
+      title: "Pricing Strategy Saved",
+      description: "Your pricing strategy has been updated.",
+    })
+  }
+
+  const handleSaveVolumeDiscounts = () => {
+    toast({
+      title: "Volume Discounts Saved",
+      description: "Volume discount settings have been updated.",
+    })
+  }
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -142,34 +179,34 @@ export default function PricingPage() {
                       <CardContent className="space-y-4">
                         <div className="space-y-2">
                           <Label htmlFor="starter-price">Monthly Price (GH₵)</Label>
-                          <Input id="starter-price" type="number" defaultValue="294" />
+                          <Input id="starter-price" type="number" placeholder="e.g., 294" />
                         </div>
                         <div className="space-y-2">
                           <Label htmlFor="starter-sms">SMS Credits</Label>
-                          <Input id="starter-sms" type="number" defaultValue="1000" />
+                          <Input id="starter-sms" type="number" placeholder="e.g., 1000" />
                         </div>
                         <div className="space-y-2">
                           <Label htmlFor="starter-voice">Voice Minutes</Label>
-                          <Input id="starter-voice" type="number" defaultValue="500" />
+                          <Input id="starter-voice" type="number" placeholder="e.g., 500" />
                         </div>
                         <div className="space-y-2">
                           <Label htmlFor="starter-email">Email Credits</Label>
-                          <Input id="starter-email" type="number" defaultValue="1000" />
+                          <Input id="starter-email" type="number" placeholder="e.g., 1000" />
                         </div>
                         {showAdvanced && (
                           <>
                             <div className="space-y-2">
                               <Label htmlFor="starter-whatsapp">WhatsApp Messages</Label>
-                              <Input id="starter-whatsapp" type="number" defaultValue="200" />
+                              <Input id="starter-whatsapp" type="number" placeholder="e.g., 200" />
                             </div>
                             <div className="space-y-2">
                               <Label htmlFor="starter-ussd">USSD Sessions</Label>
-                              <Input id="starter-ussd" type="number" defaultValue="100" />
+                              <Input id="starter-ussd" type="number" placeholder="e.g., 100" />
                             </div>
                             <div className="space-y-2">
                               <Label htmlFor="starter-api">API Access</Label>
                               <div className="flex items-center gap-2">
-                                <Switch id="starter-api" defaultChecked />
+                                <Switch id="starter-api" />
                                 <span className="text-sm">Enabled</span>
                               </div>
                             </div>
@@ -177,7 +214,12 @@ export default function PricingPage() {
                         )}
                       </CardContent>
                       <CardFooter>
-                        <Button className="w-full bg-purple-500 hover:bg-purple-600">Save Changes</Button>
+                        <Button
+                          className="w-full bg-purple-500 hover:bg-purple-600"
+                          onClick={() => handleSavePlan("Starter Plan")}
+                        >
+                          Save Changes
+                        </Button>
                       </CardFooter>
                     </Card>
                     <Card>
@@ -193,34 +235,34 @@ export default function PricingPage() {
                       <CardContent className="space-y-4">
                         <div className="space-y-2">
                           <Label htmlFor="business-price">Monthly Price (GH₵)</Label>
-                          <Input id="business-price" type="number" defaultValue="894" />
+                          <Input id="business-price" type="number" placeholder="e.g., 894" />
                         </div>
                         <div className="space-y-2">
                           <Label htmlFor="business-sms">SMS Credits</Label>
-                          <Input id="business-sms" type="number" defaultValue="5000" />
+                          <Input id="business-sms" type="number" placeholder="e.g., 5000" />
                         </div>
                         <div className="space-y-2">
                           <Label htmlFor="business-voice">Voice Minutes</Label>
-                          <Input id="business-voice" type="number" defaultValue="2000" />
+                          <Input id="business-voice" type="number" placeholder="e.g., 2000" />
                         </div>
                         <div className="space-y-2">
                           <Label htmlFor="business-email">Email Credits</Label>
-                          <Input id="business-email" type="number" defaultValue="10000" />
+                          <Input id="business-email" type="number" placeholder="e.g., 10000" />
                         </div>
                         {showAdvanced && (
                           <>
                             <div className="space-y-2">
                               <Label htmlFor="business-whatsapp">WhatsApp Messages</Label>
-                              <Input id="business-whatsapp" type="number" defaultValue="1000" />
+                              <Input id="business-whatsapp" type="number" placeholder="e.g., 1000" />
                             </div>
                             <div className="space-y-2">
                               <Label htmlFor="business-ussd">USSD Sessions</Label>
-                              <Input id="business-ussd" type="number" defaultValue="500" />
+                              <Input id="business-ussd" type="number" placeholder="e.g., 500" />
                             </div>
                             <div className="space-y-2">
                               <Label htmlFor="business-api">API Access</Label>
                               <div className="flex items-center gap-2">
-                                <Switch id="business-api" defaultChecked />
+                                <Switch id="business-api" />
                                 <span className="text-sm">Enabled</span>
                               </div>
                             </div>
@@ -228,7 +270,12 @@ export default function PricingPage() {
                         )}
                       </CardContent>
                       <CardFooter>
-                        <Button className="w-full bg-purple-500 hover:bg-purple-600">Save Changes</Button>
+                        <Button
+                          className="w-full bg-purple-500 hover:bg-purple-600"
+                          onClick={() => handleSavePlan("Business Plan")}
+                        >
+                          Save Changes
+                        </Button>
                       </CardFooter>
                     </Card>
                     <Card>
@@ -244,34 +291,34 @@ export default function PricingPage() {
                       <CardContent className="space-y-4">
                         <div className="space-y-2">
                           <Label htmlFor="enterprise-price">Monthly Price (GH₵)</Label>
-                          <Input id="enterprise-price" type="number" defaultValue="2,994" />
+                          <Input id="enterprise-price" type="number" placeholder="e.g., 2994" />
                         </div>
                         <div className="space-y-2">
                           <Label htmlFor="enterprise-sms">SMS Credits</Label>
-                          <Input id="enterprise-sms" type="number" defaultValue="20000" />
+                          <Input id="enterprise-sms" type="number" placeholder="e.g., 20000" />
                         </div>
                         <div className="space-y-2">
                           <Label htmlFor="enterprise-voice">Voice Minutes</Label>
-                          <Input id="enterprise-voice" type="number" defaultValue="10000" />
+                          <Input id="enterprise-voice" type="number" placeholder="e.g., 10000" />
                         </div>
                         <div className="space-y-2">
                           <Label htmlFor="enterprise-email">Email Credits</Label>
-                          <Input id="enterprise-email" type="number" defaultValue="50000" />
+                          <Input id="enterprise-email" type="number" placeholder="e.g., 50000" />
                         </div>
                         {showAdvanced && (
                           <>
                             <div className="space-y-2">
                               <Label htmlFor="enterprise-whatsapp">WhatsApp Messages</Label>
-                              <Input id="enterprise-whatsapp" type="number" defaultValue="5000" />
+                              <Input id="enterprise-whatsapp" type="number" placeholder="e.g., 5000" />
                             </div>
                             <div className="space-y-2">
                               <Label htmlFor="enterprise-ussd">USSD Sessions</Label>
-                              <Input id="enterprise-ussd" type="number" defaultValue="2000" />
+                              <Input id="enterprise-ussd" type="number" placeholder="e.g., 2000" />
                             </div>
                             <div className="space-y-2">
                               <Label htmlFor="enterprise-api">API Access</Label>
                               <div className="flex items-center gap-2">
-                                <Switch id="enterprise-api" defaultChecked />
+                                <Switch id="enterprise-api" />
                                 <span className="text-sm">Enabled</span>
                               </div>
                             </div>
@@ -279,7 +326,12 @@ export default function PricingPage() {
                         )}
                       </CardContent>
                       <CardFooter>
-                        <Button className="w-full bg-purple-500 hover:bg-purple-600">Save Changes</Button>
+                        <Button
+                          className="w-full bg-purple-500 hover:bg-purple-600"
+                          onClick={() => handleSavePlan("Enterprise Plan")}
+                        >
+                          Save Changes
+                        </Button>
                       </CardFooter>
                     </Card>
                   </div>
@@ -293,14 +345,14 @@ export default function PricingPage() {
                 <CardContent className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="markup-percentage">Markup Percentage (%)</Label>
-                    <Input id="markup-percentage" type="number" defaultValue="30" />
+                    <Input id="markup-percentage" type="number" placeholder="e.g., 30" />
                     <p className="text-xs text-muted-foreground">
                       This is the percentage markup you add to the base KasaSMS prices.
                     </p>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="commission-rate">Your Commission Rate (%)</Label>
-                    <Input id="commission-rate" type="number" defaultValue="30" disabled />
+                    <Input id="commission-rate" type="number" placeholder="e.g., 30" disabled />
                     <p className="text-xs text-muted-foreground">
                       This is your commission rate as a reseller. Contact KasaSMS admin to change this rate.
                     </p>
@@ -310,25 +362,27 @@ export default function PricingPage() {
                     <div className="mt-2 space-y-2 text-sm">
                       <div className="flex justify-between">
                         <span>Base KasaSMS Price:</span>
-                        <span>GH₵ 600.00</span>
+                        <span>GH₵ 0.00</span>
                       </div>
                       <div className="flex justify-between">
-                        <span>Your Markup (30%):</span>
-                        <span>GH₵ 180.00</span>
+                        <span>Your Markup (0%):</span>
+                        <span>GH₵ 0.00</span>
                       </div>
                       <div className="flex justify-between font-medium">
                         <span>Client Price:</span>
-                        <span>GH₵ 780.00</span>
+                        <span>GH₵ 0.00</span>
                       </div>
                       <div className="flex justify-between text-purple-600">
-                        <span>Your Commission (30% of GH₵ 780):</span>
-                        <span>GH₵ 234.00</span>
+                        <span>Your Commission (0% of GH₵ 0):</span>
+                        <span>GH₵ 0.00</span>
                       </div>
                     </div>
                   </div>
                 </CardContent>
                 <CardFooter>
-                  <Button className="w-full bg-purple-500 hover:bg-purple-600">Save Pricing Strategy</Button>
+                  <Button className="w-full bg-purple-500 hover:bg-purple-600" onClick={handleSavePricingStrategy}>
+                    Save Pricing Strategy
+                  </Button>
                 </CardFooter>
               </Card>
             </TabsContent>
@@ -345,19 +399,19 @@ export default function PricingPage() {
                       <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
                         <div className="space-y-2">
                           <Label htmlFor="sms-100">100 SMS Credits</Label>
-                          <Input id="sms-100" type="number" defaultValue="5.99" />
+                          <Input id="sms-100" type="number" placeholder="e.g., 5.99" />
                         </div>
                         <div className="space-y-2">
                           <Label htmlFor="sms-500">500 SMS Credits</Label>
-                          <Input id="sms-500" type="number" defaultValue="24.99" />
+                          <Input id="sms-500" type="number" placeholder="e.g., 24.99" />
                         </div>
                         <div className="space-y-2">
                           <Label htmlFor="sms-1000">1,000 SMS Credits</Label>
-                          <Input id="sms-1000" type="number" defaultValue="44.99" />
+                          <Input id="sms-1000" type="number" placeholder="e.g., 44.99" />
                         </div>
                         <div className="space-y-2">
                           <Label htmlFor="sms-5000">5,000 SMS Credits</Label>
-                          <Input id="sms-5000" type="number" defaultValue="199.99" />
+                          <Input id="sms-5000" type="number" placeholder="e.g., 199.99" />
                         </div>
                       </div>
                     </div>
@@ -368,19 +422,19 @@ export default function PricingPage() {
                       <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
                         <div className="space-y-2">
                           <Label htmlFor="voice-100">100 Minutes</Label>
-                          <Input id="voice-100" type="number" defaultValue="9.99" />
+                          <Input id="voice-100" type="number" placeholder="e.g., 9.99" />
                         </div>
                         <div className="space-y-2">
                           <Label htmlFor="voice-500">500 Minutes</Label>
-                          <Input id="voice-500" type="number" defaultValue="44.99" />
+                          <Input id="voice-500" type="number" placeholder="e.g., 44.99" />
                         </div>
                         <div className="space-y-2">
                           <Label htmlFor="voice-1000">1,000 Minutes</Label>
-                          <Input id="voice-1000" type="number" defaultValue="84.99" />
+                          <Input id="voice-1000" type="number" placeholder="e.g., 84.99" />
                         </div>
                         <div className="space-y-2">
                           <Label htmlFor="voice-5000">5,000 Minutes</Label>
-                          <Input id="voice-5000" type="number" defaultValue="399.99" />
+                          <Input id="voice-5000" type="number" placeholder="e.g., 399.99" />
                         </div>
                       </div>
                     </div>
@@ -391,19 +445,19 @@ export default function PricingPage() {
                       <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
                         <div className="space-y-2">
                           <Label htmlFor="email-1000">1,000 Emails</Label>
-                          <Input id="email-1000" type="number" defaultValue="9.99" />
+                          <Input id="email-1000" type="number" placeholder="e.g., 9.99" />
                         </div>
                         <div className="space-y-2">
                           <Label htmlFor="email-5000">5,000 Emails</Label>
-                          <Input id="email-5000" type="number" defaultValue="39.99" />
+                          <Input id="email-5000" type="number" placeholder="e.g., 39.99" />
                         </div>
                         <div className="space-y-2">
                           <Label htmlFor="email-10000">10,000 Emails</Label>
-                          <Input id="email-10000" type="number" defaultValue="69.99" />
+                          <Input id="email-10000" type="number" placeholder="e.g., 69.99" />
                         </div>
                         <div className="space-y-2">
                           <Label htmlFor="email-50000">50,000 Emails</Label>
-                          <Input id="email-50000" type="number" defaultValue="299.99" />
+                          <Input id="email-50000" type="number" placeholder="e.g., 299.99" />
                         </div>
                       </div>
                     </div>
@@ -414,19 +468,19 @@ export default function PricingPage() {
                       <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
                         <div className="space-y-2">
                           <Label htmlFor="whatsapp-100">100 Messages</Label>
-                          <Input id="whatsapp-100" type="number" defaultValue="7.99" />
+                          <Input id="whatsapp-100" type="number" placeholder="e.g., 7.99" />
                         </div>
                         <div className="space-y-2">
                           <Label htmlFor="whatsapp-500">500 Messages</Label>
-                          <Input id="whatsapp-500" type="number" defaultValue="34.99" />
+                          <Input id="whatsapp-500" type="number" placeholder="e.g., 34.99" />
                         </div>
                         <div className="space-y-2">
                           <Label htmlFor="whatsapp-1000">1,000 Messages</Label>
-                          <Input id="whatsapp-1000" type="number" defaultValue="64.99" />
+                          <Input id="whatsapp-1000" type="number" placeholder="e.g., 64.99" />
                         </div>
                         <div className="space-y-2">
                           <Label htmlFor="whatsapp-5000">5,000 Messages</Label>
-                          <Input id="whatsapp-5000" type="number" defaultValue="299.99" />
+                          <Input id="whatsapp-5000" type="number" placeholder="e.g., 299.99" />
                         </div>
                       </div>
                     </div>
@@ -437,26 +491,28 @@ export default function PricingPage() {
                       <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
                         <div className="space-y-2">
                           <Label htmlFor="ussd-100">100 Sessions</Label>
-                          <Input id="ussd-100" type="number" defaultValue="9.99" />
+                          <Input id="ussd-100" type="number" placeholder="e.g., 9.99" />
                         </div>
                         <div className="space-y-2">
                           <Label htmlFor="ussd-500">500 Sessions</Label>
-                          <Input id="ussd-500" type="number" defaultValue="44.99" />
+                          <Input id="ussd-500" type="number" placeholder="e.g., 44.99" />
                         </div>
                         <div className="space-y-2">
                           <Label htmlFor="ussd-1000">1,000 Sessions</Label>
-                          <Input id="ussd-1000" type="number" defaultValue="84.99" />
+                          <Input id="ussd-1000" type="number" placeholder="e.g., 84.99" />
                         </div>
                         <div className="space-y-2">
                           <Label htmlFor="ussd-5000">5,000 Sessions</Label>
-                          <Input id="ussd-5000" type="number" defaultValue="399.99" />
+                          <Input id="ussd-5000" type="number" placeholder="e.g., 399.99" />
                         </div>
                       </div>
                     </div>
                   </div>
                 </CardContent>
                 <CardFooter>
-                  <Button className="w-full bg-purple-500 hover:bg-purple-600">Save Service Pricing</Button>
+                  <Button className="w-full bg-purple-500 hover:bg-purple-600" onClick={handleSaveServicePricing}>
+                    Save Service Pricing
+                  </Button>
                 </CardFooter>
               </Card>
             </TabsContent>
@@ -469,55 +525,15 @@ export default function PricingPage() {
                 <CardContent className="space-y-4">
                   <div className="flex items-center justify-between">
                     <h3 className="font-medium">Active Promotions</h3>
-                    <Button className="bg-purple-500 hover:bg-purple-600">
+                    <Button className="bg-purple-500 hover:bg-purple-600" onClick={handleAddPromotion}>
                       <Plus className="mr-2 h-4 w-4" /> New Promotion
                     </Button>
-                  </div>
-                  <div className="rounded-md border p-4">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <h4 className="font-medium">Summer Sale</h4>
-                        <p className="text-sm text-muted-foreground">20% off all plans</p>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-sm">Valid until: Aug 31, 2025</p>
-                        <p className="text-sm text-green-600">Active</p>
-                      </div>
-                    </div>
-                    <div className="mt-4 flex items-center justify-end gap-2">
-                      <Button variant="outline" size="sm">
-                        Edit
-                      </Button>
-                      <Button variant="outline" size="sm" className="text-red-600">
-                        Deactivate
-                      </Button>
-                    </div>
-                  </div>
-                  <div className="rounded-md border p-4">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <h4 className="font-medium">New Client Discount</h4>
-                        <p className="text-sm text-muted-foreground">50% off first month</p>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-sm">Valid until: Dec 31, 2025</p>
-                        <p className="text-sm text-green-600">Active</p>
-                      </div>
-                    </div>
-                    <div className="mt-4 flex items-center justify-end gap-2">
-                      <Button variant="outline" size="sm">
-                        Edit
-                      </Button>
-                      <Button variant="outline" size="sm" className="text-red-600">
-                        Deactivate
-                      </Button>
-                    </div>
                   </div>
                   <div className="rounded-md border p-4 border-dashed">
                     <div className="flex flex-col items-center justify-center py-4">
                       <Plus className="h-8 w-8 text-muted-foreground" />
-                      <p className="mt-2 text-sm text-muted-foreground">Create a new promotion</p>
-                      <Button className="mt-4 bg-purple-500 hover:bg-purple-600">
+                      <p className="mt-2 text-sm text-muted-foreground">No active promotions. Create a new one.</p>
+                      <Button className="mt-4 bg-purple-500 hover:bg-purple-600" onClick={handleAddPromotion}>
                         <Plus className="mr-2 h-4 w-4" /> Add Promotion
                       </Button>
                     </div>
@@ -532,7 +548,7 @@ export default function PricingPage() {
                 <CardContent className="space-y-4">
                   <div className="space-y-2">
                     <div className="flex items-center gap-2">
-                      <Switch id="enable-volume-discounts" defaultChecked />
+                      <Switch id="enable-volume-discounts" />
                       <Label htmlFor="enable-volume-discounts">Enable Volume Discounts</Label>
                     </div>
                     <p className="text-sm text-muted-foreground">
@@ -543,14 +559,14 @@ export default function PricingPage() {
                     <div className="grid grid-cols-3 gap-4">
                       <div className="space-y-2">
                         <Label htmlFor="tier1-threshold">Tier 1 Threshold</Label>
-                        <Input id="tier1-threshold" type="number" defaultValue="5000" />
+                        <Input id="tier1-threshold" type="number" placeholder="e.g., 5000" />
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="tier1-discount">Tier 1 Discount (%)</Label>
-                        <Input id="tier1-discount" type="number" defaultValue="5" />
+                        <Input id="tier1-discount" type="number" placeholder="e.g., 5" />
                       </div>
                       <div className="flex items-end">
-                        <Button variant="outline" size="sm" className="mb-2">
+                        <Button variant="outline" size="sm" className="mb-2 bg-transparent">
                           <Check className="mr-2 h-4 w-4" />
                           Apply
                         </Button>
@@ -559,14 +575,14 @@ export default function PricingPage() {
                     <div className="grid grid-cols-3 gap-4">
                       <div className="space-y-2">
                         <Label htmlFor="tier2-threshold">Tier 2 Threshold</Label>
-                        <Input id="tier2-threshold" type="number" defaultValue="10000" />
+                        <Input id="tier2-threshold" type="number" placeholder="e.g., 10000" />
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="tier2-discount">Tier 2 Discount (%)</Label>
-                        <Input id="tier2-discount" type="number" defaultValue="10" />
+                        <Input id="tier2-discount" type="number" placeholder="e.g., 10" />
                       </div>
                       <div className="flex items-end">
-                        <Button variant="outline" size="sm" className="mb-2">
+                        <Button variant="outline" size="sm" className="mb-2 bg-transparent">
                           <Check className="mr-2 h-4 w-4" />
                           Apply
                         </Button>
@@ -575,14 +591,14 @@ export default function PricingPage() {
                     <div className="grid grid-cols-3 gap-4">
                       <div className="space-y-2">
                         <Label htmlFor="tier3-threshold">Tier 3 Threshold</Label>
-                        <Input id="tier3-threshold" type="number" defaultValue="25000" />
+                        <Input id="tier3-threshold" type="number" placeholder="e.g., 25000" />
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="tier3-discount">Tier 3 Discount (%)</Label>
-                        <Input id="tier3-discount" type="number" defaultValue="15" />
+                        <Input id="tier3-discount" type="number" placeholder="e.g., 15" />
                       </div>
                       <div className="flex items-end">
-                        <Button variant="outline" size="sm" className="mb-2">
+                        <Button variant="outline" size="sm" className="mb-2 bg-transparent">
                           <Check className="mr-2 h-4 w-4" />
                           Apply
                         </Button>
@@ -591,7 +607,9 @@ export default function PricingPage() {
                   </div>
                 </CardContent>
                 <CardFooter>
-                  <Button className="w-full bg-purple-500 hover:bg-purple-600">Save Volume Discounts</Button>
+                  <Button className="w-full bg-purple-500 hover:bg-purple-600" onClick={handleSaveVolumeDiscounts}>
+                    Save Volume Discounts
+                  </Button>
                 </CardFooter>
               </Card>
             </TabsContent>

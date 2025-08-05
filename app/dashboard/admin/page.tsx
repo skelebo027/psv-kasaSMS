@@ -1,11 +1,55 @@
 "use client"
-import Link from "next/link"
-import { BarChart3, FileText, MessageSquare, Settings, Shield, Users } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 
-export default function AdminPage() {
+import { useState } from "react"
+import Link from "next/link"
+import {
+  BarChart3,
+  Bell,
+  CreditCard,
+  MessageSquare,
+  Settings,
+  Users,
+  Wallet,
+  Activity,
+  DollarSign,
+  Mail,
+  Phone,
+} from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { UserNav } from "@/components/user-nav"
+import { MainNav } from "@/components/main-nav"
+
+export default function AdminDashboard() {
+  const [activeTab, setActiveTab] = useState("overview")
+
+  // Placeholder for dynamic data - in a real app, this would come from an API
+  const totalUsers = 0
+  const activeServices = 0
+  const totalRevenue = 0
+  const pendingApprovals = 0
+
+  const recentActivities: { id: string; description: string; date: string }[] = []
+  const serviceHealth: { name: string; status: string; icon: string; color: string }[] = [
+    { name: "SMS Gateway", status: "Operational", icon: "MessageSquare", color: "green" },
+    { name: "Voice Gateway", status: "Operational", icon: "Phone", color: "green" },
+    { name: "Email Service", status: "Operational", icon: "Mail", color: "green" },
+  ]
+
+  const getServiceIcon = (iconName: string) => {
+    switch (iconName) {
+      case "MessageSquare":
+        return <MessageSquare className="h-5 w-5" />
+      case "Phone":
+        return <Phone className="h-5 w-5" />
+      case "Mail":
+        return <Mail className="h-5 w-5" />
+      default:
+        return null
+    }
+  }
+
   return (
     <div className="flex min-h-screen flex-col">
       <div className="border-b">
@@ -13,31 +57,13 @@ export default function AdminPage() {
           <div className="flex items-center gap-2 mr-4">
             <MessageSquare className="h-6 w-6 text-orange-500" />
             <span className="text-xl font-bold text-orange-500">KasaSMS</span>
+            <div className="bg-orange-100 text-orange-800 px-2 py-1 rounded text-xs font-medium">Admin Portal</div>
           </div>
-          <div className="bg-orange-100 text-orange-800 px-2 py-1 rounded text-xs font-medium">Admin Panel</div>
-          <nav className="flex items-center space-x-4 lg:space-x-6 mx-6">
-            <Link href="/dashboard/admin" className="text-sm font-medium transition-colors hover:text-primary">
-              Dashboard
-            </Link>
-            <Link
-              href="/dashboard/admin/users"
-              className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
-            >
-              Users
-            </Link>
-            <Link
-              href="/dashboard/admin/gateways"
-              className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
-            >
-              Gateways
-            </Link>
-            <Link
-              href="/dashboard/admin/billing"
-              className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
-            >
-              Billing
-            </Link>
-          </nav>
+          <MainNav className="mx-6" />
+          <div className="ml-auto flex items-center space-x-4">
+            <Bell className="h-5 w-5 cursor-pointer" />
+            <UserNav />
+          </div>
         </div>
       </div>
       <div className="grid flex-1 md:grid-cols-[220px_1fr]">
@@ -46,41 +72,31 @@ export default function AdminPage() {
             <Link href="/dashboard/admin">
               <Button variant="ghost" className="w-full justify-start gap-2">
                 <BarChart3 className="h-5 w-5" />
-                Overview
+                Dashboard
               </Button>
             </Link>
             <Link href="/dashboard/admin/users">
               <Button variant="ghost" className="w-full justify-start gap-2">
                 <Users className="h-5 w-5" />
-                User Management
+                Users
               </Button>
             </Link>
             <Link href="/dashboard/admin/gateways">
               <Button variant="ghost" className="w-full justify-start gap-2">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="h-5 w-5"
-                >
-                  <rect width="8" height="8" x="2" y="2" rx="2" />
-                  <rect width="8" height="8" x="14" y="2" rx="2" />
-                  <rect width="8" height="8" x="2" y="14" rx="2" />
-                  <rect width="8" height="8" x="14" y="14" rx="2" />
-                </svg>
-                Gateway Management
+                <MessageSquare className="h-5 w-5" />
+                Gateways
+              </Button>
+            </Link>
+            <Link href="/dashboard/admin/api">
+              <Button variant="ghost" className="w-full justify-start gap-2">
+                <CreditCard className="h-5 w-5" />
+                API Management
               </Button>
             </Link>
             <Link href="/dashboard/admin/billing">
               <Button variant="ghost" className="w-full justify-start gap-2">
-                <FileText className="h-5 w-5" />
-                Billing & Revenue
+                <Wallet className="h-5 w-5" />
+                Billing
               </Button>
             </Link>
             <Link href="/dashboard/admin/tax">
@@ -105,37 +121,16 @@ export default function AdminPage() {
                 Tax Management
               </Button>
             </Link>
-            <Link href="/dashboard/admin/api">
+            <Link href="/dashboard/admin/security">
               <Button variant="ghost" className="w-full justify-start gap-2">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="h-5 w-5"
-                >
-                  <path d="M18 16.98h-5.99c-1.1 0-1.95.94-2.48 1.9A4 4 0 0 1 2 17c.01-.7.2-1.4.57-2" />
-                  <path d="m6 17 3.13-5.78c.53-.97.43-2.22-.26-3.07A4 4 0 0 1 17 6.05" />
-                  <path d="m12 6 3.13 5.73C15.66 12.7 16.9 13 18 13a4 4 0 0 1 0 8" />
-                </svg>
-                API Management
+                <Settings className="h-5 w-5" />
+                Security
               </Button>
             </Link>
             <Link href="/dashboard/admin/settings">
               <Button variant="ghost" className="w-full justify-start gap-2">
                 <Settings className="h-5 w-5" />
-                System Settings
-              </Button>
-            </Link>
-            <Link href="/dashboard/admin/security">
-              <Button variant="ghost" className="w-full justify-start gap-2">
-                <Shield className="h-5 w-5" />
-                Security
+                Settings
               </Button>
             </Link>
           </div>
@@ -143,18 +138,13 @@ export default function AdminPage() {
         <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
           <div className="flex items-center justify-between">
             <h1 className="text-2xl font-bold">Admin Dashboard</h1>
-            <Select defaultValue="all">
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Select view" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Data</SelectItem>
-                <SelectItem value="today">Today</SelectItem>
-                <SelectItem value="week">This Week</SelectItem>
-                <SelectItem value="month">This Month</SelectItem>
-                <SelectItem value="quarter">This Quarter</SelectItem>
-              </SelectContent>
-            </Select>
+            <Tabs defaultValue="overview" className="w-[400px]" onValueChange={setActiveTab}>
+              <TabsList>
+                <TabsTrigger value="overview">Overview</TabsTrigger>
+                <TabsTrigger value="users">Users</TabsTrigger>
+                <TabsTrigger value="system">System</TabsTrigger>
+              </TabsList>
+            </Tabs>
           </div>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             <Card>
@@ -163,135 +153,152 @@ export default function AdminPage() {
                 <Users className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">1,248</div>
-                <p className="text-xs text-muted-foreground">+12% from last month</p>
+                <div className="text-2xl font-bold">{totalUsers}</div>
+                <p className="text-xs text-muted-foreground">Registered users</p>
               </CardContent>
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Active Gateways</CardTitle>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="h-4 w-4 text-muted-foreground"
-                >
-                  <rect width="8" height="8" x="2" y="2" rx="2" />
-                  <rect width="8" height="8" x="14" y="2" rx="2" />
-                  <rect width="8" height="8" x="2" y="14" rx="2" />
-                  <rect width="8" height="8" x="14" y="14" rx="2" />
-                </svg>
+                <CardTitle className="text-sm font-medium">Active Services</CardTitle>
+                <Activity className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">12</div>
-                <p className="text-xs text-muted-foreground">+2 new this month</p>
+                <div className="text-2xl font-bold">{activeServices}</div>
+                <p className="text-xs text-muted-foreground">Currently operational</p>
               </CardContent>
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Monthly Revenue</CardTitle>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="h-4 w-4 text-muted-foreground"
-                >
-                  <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-                </svg>
+                <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
+                <DollarSign className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">$24,563.82</div>
-                <p className="text-xs text-muted-foreground">+18.2% from last month</p>
+                <div className="text-2xl font-bold">GH₵ {totalRevenue.toFixed(2)}</div>
+                <p className="text-xs text-muted-foreground">Platform-wide earnings</p>
               </CardContent>
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Active Resellers</CardTitle>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="h-4 w-4 text-muted-foreground"
-                >
-                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-                  <circle cx="9" cy="7" r="4" />
-                  <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
-                  <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                </svg>
+                <CardTitle className="text-sm font-medium">Pending Approvals</CardTitle>
+                <Bell className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">42</div>
-                <p className="text-xs text-muted-foreground">+8 from last month</p>
+                <div className="text-2xl font-bold">{pendingApprovals}</div>
+                <p className="text-xs text-muted-foreground">Actions awaiting review</p>
               </CardContent>
             </Card>
           </div>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
             <Card className="col-span-4">
               <CardHeader>
-                <CardTitle>Revenue Overview</CardTitle>
+                <CardTitle>System Overview</CardTitle>
+                <CardDescription>Key metrics and performance indicators.</CardDescription>
               </CardHeader>
               <CardContent className="pl-2">
-                <div className="h-[200px] bg-muted/20 rounded-md flex items-center justify-center text-muted-foreground">
-                  Revenue Chart Placeholder
+                <div className="h-[300px] w-full">
+                  <div className="flex h-full w-full items-center justify-center rounded-md border border-dashed">
+                    <div className="flex flex-col items-center gap-2 text-center">
+                      <BarChart3 className="h-8 w-8 text-muted-foreground" />
+                      <div className="text-sm text-muted-foreground">System performance charts will appear here</div>
+                    </div>
+                  </div>
                 </div>
               </CardContent>
             </Card>
             <Card className="col-span-3">
               <CardHeader>
-                <CardTitle>Recent Activities</CardTitle>
-                <CardDescription>Latest system activities</CardDescription>
+                <CardTitle>Recent Admin Activity</CardTitle>
+                <CardDescription>No recent activities to display.</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  <div className="flex items-center">
-                    <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
-                    <div className="flex-1 space-y-1">
-                      <p className="text-sm font-medium leading-none">New gateway added</p>
-                      <p className="text-sm text-muted-foreground">Admin user added a new SMS gateway</p>
+                {recentActivities.length === 0 ? (
+                  <div className="flex h-[200px] items-center justify-center text-muted-foreground">
+                    <div className="text-center">
+                      <p className="text-sm font-medium">No recent admin activity</p>
+                      <p className="text-xs">Admin actions will appear here.</p>
                     </div>
-                    <div className="text-sm text-muted-foreground">2h ago</div>
                   </div>
-                  <div className="flex items-center">
-                    <div className="w-2 h-2 bg-blue-500 rounded-full mr-2"></div>
-                    <div className="flex-1 space-y-1">
-                      <p className="text-sm font-medium leading-none">User upgraded plan</p>
-                      <p className="text-sm text-muted-foreground">User ID #1234 upgraded to Premium</p>
-                    </div>
-                    <div className="text-sm text-muted-foreground">5h ago</div>
+                ) : (
+                  <div className="space-y-4">
+                    {recentActivities.map((activity) => (
+                      <div key={activity.id} className="flex items-center">
+                        <div className="flex h-9 w-9 items-center justify-center rounded-full bg-orange-100">
+                          <Activity className="h-5 w-5 text-orange-700" />
+                        </div>
+                        <div className="ml-4 space-y-1">
+                          <p className="text-sm font-medium leading-none">{activity.description}</p>
+                          <p className="text-sm text-muted-foreground">{activity.date}</p>
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                  <div className="flex items-center">
-                    <div className="w-2 h-2 bg-orange-500 rounded-full mr-2"></div>
-                    <div className="flex-1 space-y-1">
-                      <p className="text-sm font-medium leading-none">New reseller registered</p>
-                      <p className="text-sm text-muted-foreground">New reseller account created</p>
+                )}
+              </CardContent>
+              <CardFooter>
+                <Button variant="outline" className="w-full bg-transparent">
+                  View All Activities
+                </Button>
+              </CardFooter>
+            </Card>
+          </div>
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            <Card>
+              <CardHeader>
+                <CardTitle>Quick Actions</CardTitle>
+              </CardHeader>
+              <CardContent className="grid gap-2">
+                <Button className="w-full bg-orange-500 hover:bg-orange-600">
+                  <Users className="mr-2 h-4 w-4" />
+                  Manage Users
+                </Button>
+                <Button variant="outline" className="w-full bg-transparent">
+                  <MessageSquare className="mr-2 h-4 w-4" />
+                  Configure Gateways
+                </Button>
+                <Button variant="outline" className="w-full bg-transparent">
+                  <Settings className="mr-2 h-4 w-4" />
+                  System Settings
+                </Button>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle>Service Health</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {serviceHealth.length === 0 ? (
+                  <div className="flex h-[200px] items-center justify-center text-muted-foreground">
+                    <div className="text-center">
+                      <p className="text-sm font-medium">No service health data</p>
+                      <p className="text-xs">Service status will be displayed here.</p>
                     </div>
-                    <div className="text-sm text-muted-foreground">1d ago</div>
                   </div>
-                  <div className="flex items-center">
-                    <div className="w-2 h-2 bg-red-500 rounded-full mr-2"></div>
-                    <div className="flex-1 space-y-1">
-                      <p className="text-sm font-medium leading-none">Gateway error detected</p>
-                      <p className="text-sm text-muted-foreground">Gateway ID #5678 reported connection issues</p>
+                ) : (
+                  serviceHealth.map((service, index) => (
+                    <div key={index} className="flex items-center justify-between">
+                      <div className="flex items-center space-x-2">
+                        {getServiceIcon(service.icon)}
+                        <span>{service.name}</span>
+                      </div>
+                      <span
+                        className={`inline-flex items-center rounded-full bg-${service.color}-100 px-2.5 py-0.5 text-xs font-medium text-${service.color}-800`}
+                      >
+                        {service.status}
+                      </span>
                     </div>
-                    <div className="text-sm text-muted-foreground">2d ago</div>
+                  ))
+                )}
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle>System Alerts</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex h-[200px] items-center justify-center text-muted-foreground">
+                  <div className="text-center">
+                    <p className="text-sm font-medium">No active alerts</p>
+                    <p className="text-xs">Critical system alerts will appear here.</p>
                   </div>
                 </div>
               </CardContent>

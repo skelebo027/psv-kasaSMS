@@ -1,99 +1,38 @@
 "use client"
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip } from "recharts"
+import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts"
+import { BarChart3 } from "lucide-react" // Import BarChart3 from lucide-react or wherever it is declared
 
-const data = [
-  {
-    name: "Jan",
-    total: 15420,
-  },
-  {
-    name: "Feb",
-    total: 18230,
-  },
-  {
-    name: "Mar",
-    total: 22100,
-  },
-  {
-    name: "Apr",
-    total: 19800,
-  },
-  {
-    name: "May",
-    total: 25600,
-  },
-  {
-    name: "Jun",
-    total: 28900,
-  },
-  {
-    name: "Jul",
-    total: 31200,
-  },
-  {
-    name: "Aug",
-    total: 29800,
-  },
-  {
-    name: "Sep",
-    total: 33400,
-  },
-  {
-    name: "Oct",
-    total: 36700,
-  },
-  {
-    name: "Nov",
-    total: 38900,
-  },
-  {
-    name: "Dec",
-    total: 42100,
-  },
-]
+interface RevenueChartProps {
+  data: { name: string; total: number }[]
+}
 
-export default function RevenueChart() {
+export function RevenueChart({ data }: RevenueChartProps) {
+  if (!data || data.length === 0) {
+    return (
+      <div className="flex h-[350px] items-center justify-center rounded-md border border-dashed text-muted-foreground">
+        <div className="text-center">
+          <BarChart3 className="h-8 w-8 text-muted-foreground mx-auto" />
+          <p className="text-sm font-medium mt-2">No revenue data available</p>
+          <p className="text-xs">Revenue chart will appear here once data is available.</p>
+        </div>
+      </div>
+    )
+  }
+
   return (
-    <Card className="col-span-4">
-      <CardHeader>
-        <CardTitle>Revenue Overview</CardTitle>
-        <CardDescription>Monthly revenue for the current year in Ghana Cedis</CardDescription>
-      </CardHeader>
-      <CardContent className="pl-2">
-        {data.length > 0 ? (
-          <ResponsiveContainer width="100%" height={350}>
-            <BarChart data={data}>
-              <XAxis dataKey="name" stroke="#888888" fontSize={12} tickLine={false} axisLine={false} />
-              <YAxis
-                stroke="#888888"
-                fontSize={12}
-                tickLine={false}
-                axisLine={false}
-                tickFormatter={(value) => `GH₵${value}`}
-              />
-              <Tooltip
-                formatter={(value) => [`GH₵${value}`, "Revenue"]}
-                labelStyle={{ color: "#000" }}
-                contentStyle={{
-                  backgroundColor: "#fff",
-                  border: "1px solid #ccc",
-                  borderRadius: "4px",
-                }}
-              />
-              <Bar dataKey="total" fill="currentColor" radius={[4, 4, 0, 0]} className="fill-primary" />
-            </BarChart>
-          </ResponsiveContainer>
-        ) : (
-          <div className="h-[350px] flex items-center justify-center">
-            <div className="text-center text-muted-foreground">
-              <p className="text-lg font-medium">No revenue data</p>
-              <p className="text-sm">Revenue analytics will appear here</p>
-            </div>
-          </div>
-        )}
-      </CardContent>
-    </Card>
+    <ResponsiveContainer width="100%" height={350}>
+      <BarChart data={data}>
+        <XAxis dataKey="name" stroke="#888888" fontSize={12} tickLine={false} axisLine={false} />
+        <YAxis
+          stroke="#888888"
+          fontSize={12}
+          tickLine={false}
+          axisLine={false}
+          tickFormatter={(value) => `GH₵ ${value}`}
+        />
+        <Bar dataKey="total" fill="#adfa1d" radius={[4, 4, 0, 0]} />
+      </BarChart>
+    </ResponsiveContainer>
   )
 }

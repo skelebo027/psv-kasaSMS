@@ -1,59 +1,56 @@
-import type React from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { CreditCard, DollarSign, Package, Users } from "lucide-react"
+import { DollarSign, Users, CreditCard, Activity } from "lucide-react"
 
 interface CardData {
-  title: string
-  value: string
-  change: string
-  icon: React.ComponentType<{ className?: string }>
+  totalRevenue: number
+  subscriptions: number
+  sales: number
+  activeNow: number
 }
 
-const cardData: CardData[] = [
-  {
-    title: "Total Revenue",
-    value: "GH₵ 0.00",
-    change: "No data available",
-    icon: DollarSign,
-  },
-  {
-    title: "Messages Sent",
-    value: "0",
-    change: "No messages sent yet",
-    icon: Package,
-  },
-  {
-    title: "Active Users",
-    value: "0",
-    change: "No active users",
-    icon: Users,
-  },
-  {
-    title: "Active Campaigns",
-    value: "0",
-    change: "No active campaigns",
-    icon: CreditCard,
-  },
-]
-
-export default function CardWrapper() {
+export function CardStats({ cardData }: { cardData: CardData }) {
   return (
-    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-      {cardData.map((card, index) => {
-        const Icon = card.icon
-        return (
-          <Card key={index}>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">{card.title}</CardTitle>
-              <Icon className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{card.value}</div>
-              <p className="text-xs text-muted-foreground">{card.change}</p>
-            </CardContent>
-          </Card>
-        )
-      })}
-    </div>
+    <>
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
+          <DollarSign className="h-4 w-4 text-muted-foreground" />
+        </CardHeader>
+        <CardContent>
+          <div className="text-2xl font-bold">GH₵ {cardData.totalRevenue.toFixed(2)}</div>
+          <p className="text-xs text-muted-foreground">+20.1% from last month</p>
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardTitle className="text-sm font-medium">Subscriptions</CardTitle>
+          <Users className="h-4 w-4 text-muted-foreground" />
+        </CardHeader>
+        <CardContent>
+          <div className="text-2xl font-bold">+{cardData.subscriptions}</div>
+          <p className="text-xs text-muted-foreground">+180.1% from last month</p>
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardTitle className="text-sm font-medium">Sales</CardTitle>
+          <CreditCard className="h-4 w-4 text-muted-foreground" />
+        </CardHeader>
+        <CardContent>
+          <div className="text-2xl font-bold">GH₵ {cardData.sales.toFixed(2)}</div>
+          <p className="text-xs text-muted-foreground">+19% from last month</p>
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardTitle className="text-sm font-medium">Active Now</CardTitle>
+          <Activity className="h-4 w-4 text-muted-foreground" />
+        </CardHeader>
+        <CardContent>
+          <div className="text-2xl font-bold">+{cardData.activeNow}</div>
+          <p className="text-xs text-muted-foreground">+201 since last hour</p>
+        </CardContent>
+      </Card>
+    </>
   )
 }

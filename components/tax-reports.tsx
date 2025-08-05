@@ -1,7 +1,9 @@
 "use client"
 
+import { CardFooter } from "@/components/ui/card"
+
 import { useState } from "react"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
@@ -12,6 +14,8 @@ import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
 import { format } from "date-fns"
 import { CalendarIcon, Download, FileText, Filter, Printer } from "lucide-react"
+import { useToast } from "@/hooks/use-toast"
+import { Label } from "@/components/ui/label"
 
 // Sample data for reports
 const vatReportData = [
@@ -143,9 +147,105 @@ const withholdingTaxReportData = [
 export function TaxReports() {
   const [date, setDate] = useState<Date | undefined>(new Date())
   const [reportType, setReportType] = useState("vat")
+  const { toast } = useToast()
+
+  const taxReports: { date: string; period: string; type: string; amount: number; status: string }[] = []
+
+  const handleGenerateReport = () => {
+    toast({
+      title: "Report Generation Started",
+      description: "Your tax report is being generated. It will be available shortly.",
+    })
+  }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
+      <Card>
+        <CardHeader>
+          <CardTitle>Generate Tax Report</CardTitle>
+          <CardDescription>Create detailed tax reports for specific periods.</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <div className="space-y-2">
+              <Label htmlFor="report-type">Report Type</Label>
+              <Select defaultValue="summary">
+                <SelectTrigger id="report-type">
+                  <SelectValue placeholder="Select report type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="summary">Summary Report</SelectItem>
+                  <SelectItem value="detailed">Detailed Report</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="report-period">Reporting Period</Label>
+              <Select defaultValue="monthly">
+                <SelectTrigger id="report-period">
+                  <SelectValue placeholder="Select period" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="monthly">Monthly</SelectItem>
+                  <SelectItem value="quarterly">Quarterly</SelectItem>
+                  <SelectItem value="yearly">Yearly</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <Button className="w-full" onClick={handleGenerateReport}>
+            Generate Report
+          </Button>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Generated Reports</CardTitle>
+          <CardDescription>View and download your past tax reports.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          {taxReports.length === 0 ? (
+            <div className="flex h-[200px] items-center justify-center rounded-md border border-dashed text-muted-foreground">
+              <div className="text-center">
+                <FileText className="h-8 w-8 text-muted-foreground" />
+                <div className="text-sm text-muted-foreground">No reports generated yet.</div>
+                <div className="text-xs">Generate a report above to see it here.</div>
+              </div>
+            </div>
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Date</TableHead>
+                  <TableHead>Period</TableHead>
+                  <TableHead>Type</TableHead>
+                  <TableHead>Amount</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {taxReports.map((report, index) => (
+                  <TableRow key={index}>
+                    <TableCell>{report.date}</TableCell>
+                    <TableCell>{report.period}</TableCell>
+                    <TableCell>{report.type}</TableCell>
+                    <TableCell className="font-medium">GH₵ {report.amount.toFixed(2)}</TableCell>
+                    <TableCell>{report.status}</TableCell>
+                    <TableCell className="text-right">
+                      <Button variant="ghost" size="sm">
+                        <Download className="h-4 w-4" />
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
+        </CardContent>
+      </Card>
+
       <Card>
         <CardHeader>
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">

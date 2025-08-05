@@ -14,6 +14,40 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 export default function BillingPage() {
   const [paymentMethod, setPaymentMethod] = useState("bank")
 
+  // Placeholder for dynamic data - in a real app, this would come from an API
+  const currentBalance = 0
+  const monthlySpending = 0
+  const smsCredits = 0
+  const nextBillingDate = "N/A"
+  const currentPlan = "No Plan"
+  const planPrice = "N/A"
+  const nextBillingInfo = "N/A"
+  const paymentMethodDetails = { type: "N/A", last4: "N/A" }
+  const billingAddress = {
+    name: "N/A",
+    company: "N/A",
+    street: "N/A",
+    city: "N/A",
+    country: "N/A",
+  }
+
+  const recentTransactions: { date: string; description: string; amount: number; status: string }[] = []
+  const transactionHistory: {
+    date: string
+    transactionId: string
+    description: string
+    type: string
+    amount: number
+    status: string
+  }[] = []
+  const invoicesAndReceipts: {
+    date: string
+    documentId: string
+    type: string
+    description: string
+    amount: number
+  }[] = []
+
   return (
     <div className="flex min-h-screen flex-col">
       <div className="border-b">
@@ -114,7 +148,7 @@ export default function BillingPage() {
                     <Wallet className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">GH₵ 2,070.00</div>
+                    <div className="text-2xl font-bold">GH₵ {currentBalance.toFixed(2)}</div>
                     <p className="text-xs text-muted-foreground">Available for services</p>
                   </CardContent>
                 </Card>
@@ -136,8 +170,8 @@ export default function BillingPage() {
                     </svg>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">GH₵ 7,470.00</div>
-                    <p className="text-xs text-muted-foreground">+12% from last month</p>
+                    <div className="text-2xl font-bold">GH₵ {monthlySpending.toFixed(2)}</div>
+                    <p className="text-xs text-muted-foreground">No change from last month</p>
                   </CardContent>
                 </Card>
                 <Card>
@@ -146,8 +180,8 @@ export default function BillingPage() {
                     <MessageSquare className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">3,450</div>
-                    <p className="text-xs text-muted-foreground">Approx. GH₵ 1,035.00 value</p>
+                    <div className="text-2xl font-bold">{smsCredits}</div>
+                    <p className="text-xs text-muted-foreground">Approx. GH₵ {(smsCredits * 0.3).toFixed(2)} value</p>
                   </CardContent>
                 </Card>
                 <Card>
@@ -156,8 +190,10 @@ export default function BillingPage() {
                     <CreditCard className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">May 28, 2025</div>
-                    <p className="text-xs text-muted-foreground">Business Plan - GH₵ 894.00</p>
+                    <div className="text-2xl font-bold">{nextBillingDate}</div>
+                    <p className="text-xs text-muted-foreground">
+                      {currentPlan} - {planPrice}
+                    </p>
                   </CardContent>
                 </Card>
               </div>
@@ -171,12 +207,12 @@ export default function BillingPage() {
                     <h3 className="font-medium">Current Plan</h3>
                     <div className="mt-2 flex items-center justify-between">
                       <div>
-                        <p className="font-medium">Business Plan</p>
-                        <p className="text-sm text-muted-foreground">Billed monthly</p>
+                        <p className="font-medium">{currentPlan}</p>
+                        <p className="text-sm text-muted-foreground">No billing cycle set</p>
                       </div>
                       <div className="text-right">
-                        <p className="font-medium">GH₵ 894.00/month</p>
-                        <p className="text-sm text-muted-foreground">Next billing: May 28, 2025</p>
+                        <p className="font-medium">{planPrice}</p>
+                        <p className="text-sm text-muted-foreground">Next billing: {nextBillingInfo}</p>
                       </div>
                     </div>
                     <div className="mt-4 flex justify-end gap-2">
@@ -194,8 +230,8 @@ export default function BillingPage() {
                       <div className="flex items-center gap-2">
                         <CreditCard className="h-5 w-5" />
                         <div>
-                          <p className="font-medium">Mobile Money</p>
-                          <p className="text-sm text-muted-foreground">+233 XX XXX XXXX</p>
+                          <p className="font-medium">{paymentMethodDetails.type}</p>
+                          <p className="text-sm text-muted-foreground">{paymentMethodDetails.last4}</p>
                         </div>
                       </div>
                       <Button variant="outline" size="sm">
@@ -206,10 +242,12 @@ export default function BillingPage() {
                   <div className="rounded-md border p-4">
                     <h3 className="font-medium">Billing Address</h3>
                     <div className="mt-2">
-                      <p>John Doe</p>
-                      <p>KasaSMS Inc.</p>
-                      <p>123 Main Street</p>
-                      <p>Accra, Ghana</p>
+                      <p>{billingAddress.name}</p>
+                      <p>{billingAddress.company}</p>
+                      <p>{billingAddress.street}</p>
+                      <p>
+                        {billingAddress.city}, {billingAddress.country}
+                      </p>
                     </div>
                     <div className="mt-4 flex justify-end">
                       <Button variant="outline" size="sm">
@@ -224,51 +262,35 @@ export default function BillingPage() {
                   <CardTitle>Recent Transactions</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Date</TableHead>
-                        <TableHead>Description</TableHead>
-                        <TableHead>Amount</TableHead>
-                        <TableHead>Status</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      <TableRow>
-                        <TableCell>May 12, 2025</TableCell>
-                        <TableCell>SMS Credits Purchase</TableCell>
-                        <TableCell className="font-medium">GH₵ 294.00</TableCell>
-                        <TableCell className="text-green-500">Completed</TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>May 8, 2025</TableCell>
-                        <TableCell>Voice Credits Purchase</TableCell>
-                        <TableCell className="font-medium">GH₵ 174.00</TableCell>
-                        <TableCell className="text-green-500">Completed</TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>May 1, 2025</TableCell>
-                        <TableCell>Monthly Subscription</TableCell>
-                        <TableCell className="font-medium">GH₵ 894.00</TableCell>
-                        <TableCell className="text-green-500">Completed</TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>Apr 15, 2025</TableCell>
-                        <TableCell>SMS Credits Purchase</TableCell>
-                        <TableCell className="font-medium">GH₵ 594.00</TableCell>
-                        <TableCell className="text-green-500">Completed</TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>Apr 1, 2025</TableCell>
-                        <TableCell>Monthly Subscription</TableCell>
-                        <TableCell className="font-medium">GH₵ 894.00</TableCell>
-                        <TableCell className="text-green-500">Completed</TableCell>
-                      </TableRow>
-                    </TableBody>
-                  </Table>
+                  {recentTransactions.length === 0 ? (
+                    <div className="flex h-[100px] items-center justify-center text-muted-foreground">
+                      No recent transactions.
+                    </div>
+                  ) : (
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Date</TableHead>
+                          <TableHead>Description</TableHead>
+                          <TableHead>Amount</TableHead>
+                          <TableHead>Status</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {recentTransactions.map((transaction, index) => (
+                          <TableRow key={index}>
+                            <TableCell>{transaction.date}</TableCell>
+                            <TableCell>{transaction.description}</TableCell>
+                            <TableCell className="font-medium">GH₵ {transaction.amount.toFixed(2)}</TableCell>
+                            <TableCell className="text-green-500">{transaction.status}</TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  )}
                 </CardContent>
                 <CardFooter>
-                  <Button variant="outline" className="w-full">
+                  <Button variant="outline" className="w-full bg-transparent">
                     View All Transactions
                   </Button>
                 </CardFooter>
@@ -448,112 +470,55 @@ export default function BillingPage() {
                       Export
                     </Button>
                   </div>
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Date</TableHead>
-                        <TableHead>Transaction ID</TableHead>
-                        <TableHead>Description</TableHead>
-                        <TableHead>Type</TableHead>
-                        <TableHead>Amount</TableHead>
-                        <TableHead>Status</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      <TableRow>
-                        <TableCell>May 12, 2025</TableCell>
-                        <TableCell className="font-mono text-xs">TXN-12345678</TableCell>
-                        <TableCell>SMS Credits Purchase</TableCell>
-                        <TableCell>Credit Purchase</TableCell>
-                        <TableCell className="font-medium text-green-600">
-                          <div className="flex items-center">
-                            <ArrowDown className="mr-1 h-4 w-4" />
-                            GH₵ 294.00
-                          </div>
-                        </TableCell>
-                        <TableCell className="text-green-500">Completed</TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>May 8, 2025</TableCell>
-                        <TableCell className="font-mono text-xs">TXN-12345677</TableCell>
-                        <TableCell>Voice Credits Purchase</TableCell>
-                        <TableCell>Credit Purchase</TableCell>
-                        <TableCell className="font-medium text-green-600">
-                          <div className="flex items-center">
-                            <ArrowDown className="mr-1 h-4 w-4" />
-                            GH₵ 174.00
-                          </div>
-                        </TableCell>
-                        <TableCell className="text-green-500">Completed</TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>May 1, 2025</TableCell>
-                        <TableCell className="font-mono text-xs">TXN-12345676</TableCell>
-                        <TableCell>Monthly Subscription</TableCell>
-                        <TableCell>Subscription</TableCell>
-                        <TableCell className="font-medium text-green-600">
-                          <div className="flex items-center">
-                            <ArrowDown className="mr-1 h-4 w-4" />
-                            GH₵ 894.00
-                          </div>
-                        </TableCell>
-                        <TableCell className="text-green-500">Completed</TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>Apr 20, 2025</TableCell>
-                        <TableCell className="font-mono text-xs">TXN-12345675</TableCell>
-                        <TableCell>Refund - Unused Credits</TableCell>
-                        <TableCell>Refund</TableCell>
-                        <TableCell className="font-medium text-red-600">
-                          <div className="flex items-center">
-                            <ArrowUp className="mr-1 h-4 w-4" />
-                            GH₵ 150.00
-                          </div>
-                        </TableCell>
-                        <TableCell className="text-green-500">Completed</TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>Apr 15, 2025</TableCell>
-                        <TableCell className="font-mono text-xs">TXN-12345674</TableCell>
-                        <TableCell>SMS Credits Purchase</TableCell>
-                        <TableCell>Credit Purchase</TableCell>
-                        <TableCell className="font-medium text-green-600">
-                          <div className="flex items-center">
-                            <ArrowDown className="mr-1 h-4 w-4" />
-                            GH₵ 594.00
-                          </div>
-                        </TableCell>
-                        <TableCell className="text-green-500">Completed</TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>Apr 1, 2025</TableCell>
-                        <TableCell className="font-mono text-xs">TXN-12345673</TableCell>
-                        <TableCell>Monthly Subscription</TableCell>
-                        <TableCell>Subscription</TableCell>
-                        <TableCell className="font-medium text-green-600">
-                          <div className="flex items-center">
-                            <ArrowDown className="mr-1 h-4 w-4" />
-                            GH₵ 894.00
-                          </div>
-                        </TableCell>
-                        <TableCell className="text-green-500">Completed</TableCell>
-                      </TableRow>
-                    </TableBody>
-                  </Table>
+                  {transactionHistory.length === 0 ? (
+                    <div className="flex h-[200px] items-center justify-center text-muted-foreground">
+                      No transactions found.
+                    </div>
+                  ) : (
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Date</TableHead>
+                          <TableHead>Transaction ID</TableHead>
+                          <TableHead>Description</TableHead>
+                          <TableHead>Type</TableHead>
+                          <TableHead>Amount</TableHead>
+                          <TableHead>Status</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {transactionHistory.map((transaction, index) => (
+                          <TableRow key={index}>
+                            <TableCell>{transaction.date}</TableCell>
+                            <TableCell className="font-mono text-xs">{transaction.transactionId}</TableCell>
+                            <TableCell>{transaction.description}</TableCell>
+                            <TableCell>{transaction.type}</TableCell>
+                            <TableCell
+                              className={`font-medium ${transaction.type === "Refund" ? "text-red-600" : "text-green-600"}`}
+                            >
+                              <div className="flex items-center">
+                                {transaction.type === "Refund" ? (
+                                  <ArrowUp className="mr-1 h-4 w-4" />
+                                ) : (
+                                  <ArrowDown className="mr-1 h-4 w-4" />
+                                )}
+                                GH₵ {transaction.amount.toFixed(2)}
+                              </div>
+                            </TableCell>
+                            <TableCell className="text-green-500">{transaction.status}</TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  )}
                   <div className="flex items-center justify-center">
-                    <Button variant="outline" size="sm" className="mx-1">
+                    <Button variant="outline" size="sm" className="mx-1 bg-transparent" disabled>
                       Previous
                     </Button>
-                    <Button variant="outline" size="sm" className="mx-1">
+                    <Button variant="outline" size="sm" className="mx-1 bg-gray-100">
                       1
                     </Button>
-                    <Button variant="outline" size="sm" className="mx-1 bg-gray-100">
-                      2
-                    </Button>
-                    <Button variant="outline" size="sm" className="mx-1">
-                      3
-                    </Button>
-                    <Button variant="outline" size="sm" className="mx-1">
+                    <Button variant="outline" size="sm" className="mx-1 bg-transparent" disabled>
                       Next
                     </Button>
                   </div>
@@ -599,118 +564,48 @@ export default function BillingPage() {
                       </Select>
                     </div>
                   </div>
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Date</TableHead>
-                        <TableHead>Document #</TableHead>
-                        <TableHead>Type</TableHead>
-                        <TableHead>Description</TableHead>
-                        <TableHead>Amount</TableHead>
-                        <TableHead>Actions</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      <TableRow>
-                        <TableCell>May 12, 2025</TableCell>
-                        <TableCell className="font-mono text-xs">INV-20250512</TableCell>
-                        <TableCell>Receipt</TableCell>
-                        <TableCell>SMS Credits Purchase</TableCell>
-                        <TableCell className="font-medium">GH₵ 294.00</TableCell>
-                        <TableCell>
-                          <Button variant="ghost" size="sm">
-                            <Download className="h-4 w-4" />
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>May 8, 2025</TableCell>
-                        <TableCell className="font-mono text-xs">INV-20250508</TableCell>
-                        <TableCell>Receipt</TableCell>
-                        <TableCell>Voice Credits Purchase</TableCell>
-                        <TableCell className="font-medium">GH₵ 174.00</TableCell>
-                        <TableCell>
-                          <Button variant="ghost" size="sm">
-                            <Download className="h-4 w-4" />
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>May 1, 2025</TableCell>
-                        <TableCell className="font-mono text-xs">INV-20250501</TableCell>
-                        <TableCell>Invoice</TableCell>
-                        <TableCell>Monthly Subscription - May 2025</TableCell>
-                        <TableCell className="font-medium">GH₵ 894.00</TableCell>
-                        <TableCell>
-                          <Button variant="ghost" size="sm">
-                            <Download className="h-4 w-4" />
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>May 1, 2025</TableCell>
-                        <TableCell className="font-mono text-xs">RCT-20250501</TableCell>
-                        <TableCell>Receipt</TableCell>
-                        <TableCell>Monthly Subscription - May 2025</TableCell>
-                        <TableCell className="font-medium">GH₵ 894.00</TableCell>
-                        <TableCell>
-                          <Button variant="ghost" size="sm">
-                            <Download className="h-4 w-4" />
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>Apr 15, 2025</TableCell>
-                        <TableCell className="font-mono text-xs">INV-20250415</TableCell>
-                        <TableCell>Receipt</TableCell>
-                        <TableCell>SMS Credits Purchase</TableCell>
-                        <TableCell className="font-medium">GH₵ 594.00</TableCell>
-                        <TableCell>
-                          <Button variant="ghost" size="sm">
-                            <Download className="h-4 w-4" />
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>Apr 1, 2025</TableCell>
-                        <TableCell className="font-mono text-xs">INV-20250401</TableCell>
-                        <TableCell>Invoice</TableCell>
-                        <TableCell>Monthly Subscription - April 2025</TableCell>
-                        <TableCell className="font-medium">GH₵ 894.00</TableCell>
-                        <TableCell>
-                          <Button variant="ghost" size="sm">
-                            <Download className="h-4 w-4" />
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>Apr 1, 2025</TableCell>
-                        <TableCell className="font-mono text-xs">RCT-20250401</TableCell>
-                        <TableCell>Receipt</TableCell>
-                        <TableCell>Monthly Subscription - April 2025</TableCell>
-                        <TableCell className="font-medium">GH₵ 894.00</TableCell>
-                        <TableCell>
-                          <Button variant="ghost" size="sm">
-                            <Download className="h-4 w-4" />
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    </TableBody>
-                  </Table>
+                  {invoicesAndReceipts.length === 0 ? (
+                    <div className="flex h-[200px] items-center justify-center text-muted-foreground">
+                      No invoices or receipts found.
+                    </div>
+                  ) : (
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Date</TableHead>
+                          <TableHead>Document #</TableHead>
+                          <TableHead>Type</TableHead>
+                          <TableHead>Description</TableHead>
+                          <TableHead>Amount</TableHead>
+                          <TableHead>Actions</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {invoicesAndReceipts.map((doc, index) => (
+                          <TableRow key={index}>
+                            <TableCell>{doc.date}</TableCell>
+                            <TableCell className="font-mono text-xs">{doc.documentId}</TableCell>
+                            <TableCell>{doc.type}</TableCell>
+                            <TableCell>{doc.description}</TableCell>
+                            <TableCell className="font-medium">GH₵ {doc.amount.toFixed(2)}</TableCell>
+                            <TableCell>
+                              <Button variant="ghost" size="sm">
+                                <Download className="h-4 w-4" />
+                              </Button>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  )}
                   <div className="flex items-center justify-center">
-                    <Button variant="outline" size="sm" className="mx-1">
+                    <Button variant="outline" size="sm" className="mx-1 bg-transparent" disabled>
                       Previous
                     </Button>
                     <Button variant="outline" size="sm" className="mx-1 bg-gray-100">
                       1
                     </Button>
-                    <Button variant="outline" size="sm" className="mx-1">
-                      2
-                    </Button>
-                    <Button variant="outline" size="sm" className="mx-1">
-                      3
-                    </Button>
-                    <Button variant="outline" size="sm" className="mx-1">
+                    <Button variant="outline" size="sm" className="mx-1 bg-transparent" disabled>
                       Next
                     </Button>
                   </div>

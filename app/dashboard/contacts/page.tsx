@@ -40,59 +40,8 @@ interface Group {
 
 export default function ContactsPage() {
   const { toast } = useToast()
-  const [contacts, setContacts] = useState<Contact[]>([
-    {
-      id: "1",
-      firstName: "John",
-      lastName: "Doe",
-      phone: "+233201234567",
-      email: "john@example.com",
-      groups: ["Customers", "VIP"],
-      createdAt: "2024-01-10",
-    },
-    {
-      id: "2",
-      firstName: "Jane",
-      lastName: "Smith",
-      phone: "+233241234567",
-      email: "jane@example.com",
-      groups: ["Customers"],
-      createdAt: "2024-01-12",
-    },
-    {
-      id: "3",
-      firstName: "Michael",
-      lastName: "Johnson",
-      phone: "+233501234567",
-      email: "michael@example.com",
-      groups: ["Subscribers"],
-      createdAt: "2024-01-15",
-    },
-  ])
-
-  const [groups, setGroups] = useState<Group[]>([
-    {
-      id: "1",
-      name: "Customers",
-      description: "All paying customers",
-      contactCount: 1245,
-      createdAt: "2024-01-05",
-    },
-    {
-      id: "2",
-      name: "Subscribers",
-      description: "Newsletter subscribers",
-      contactCount: 2300,
-      createdAt: "2024-01-07",
-    },
-    {
-      id: "3",
-      name: "VIP",
-      description: "VIP customers",
-      contactCount: 150,
-      createdAt: "2024-01-10",
-    },
-  ])
+  const [contacts, setContacts] = useState<Contact[]>([]) // Initialize as empty
+  const [groups, setGroups] = useState<Group[]>([]) // Initialize as empty
 
   const [isContactDialogOpen, setIsContactDialogOpen] = useState(false)
   const [isGroupDialogOpen, setIsGroupDialogOpen] = useState(false)
@@ -225,7 +174,7 @@ export default function ContactsPage() {
       id: Date.now().toString(),
       name: groupForm.name,
       description: groupForm.description,
-      contactCount: 0,
+      contactCount: 0, // New groups start with 0 contacts
       createdAt: new Date().toISOString().split("T")[0],
     }
 
@@ -313,6 +262,10 @@ export default function ContactsPage() {
     })
   }
 
+  // Calculate counts dynamically
+  const customersCount = contacts.filter((contact) => contact.groups.includes("Customers")).length
+  const subscribersCount = contacts.filter((contact) => contact.groups.includes("Subscribers")).length
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -359,7 +312,7 @@ export default function ContactsPage() {
             <UserPlus className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">1,245</div>
+            <div className="text-2xl font-bold">{customersCount}</div>
             <p className="text-xs text-muted-foreground">In customers group</p>
           </CardContent>
         </Card>
@@ -369,7 +322,7 @@ export default function ContactsPage() {
             <UserCheck className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">2,300</div>
+            <div className="text-2xl font-bold">{subscribersCount}</div>
             <p className="text-xs text-muted-foreground">Newsletter subscribers</p>
           </CardContent>
         </Card>
@@ -459,6 +412,11 @@ export default function ContactsPage() {
                           {group.name}
                         </Badge>
                       ))}
+                      {groups.length === 0 && (
+                        <span className="text-sm text-muted-foreground">
+                          No groups available. Create one in the "Groups" tab.
+                        </span>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -473,49 +431,59 @@ export default function ContactsPage() {
 
           <Card>
             <CardContent className="p-0">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Name</TableHead>
-                    <TableHead>Phone</TableHead>
-                    <TableHead>Email</TableHead>
-                    <TableHead>Groups</TableHead>
-                    <TableHead>Created</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {contacts.map((contact) => (
-                    <TableRow key={contact.id}>
-                      <TableCell className="font-medium">
-                        {contact.firstName} {contact.lastName}
-                      </TableCell>
-                      <TableCell>{contact.phone}</TableCell>
-                      <TableCell>{contact.email}</TableCell>
-                      <TableCell>
-                        <div className="flex flex-wrap gap-1">
-                          {contact.groups.map((group) => (
-                            <Badge key={group} variant="outline" className="text-xs">
-                              {group}
-                            </Badge>
-                          ))}
-                        </div>
-                      </TableCell>
-                      <TableCell>{contact.createdAt}</TableCell>
-                      <TableCell className="text-right">
-                        <div className="flex justify-end space-x-2">
-                          <Button variant="outline" size="sm" onClick={() => handleEditContact(contact)}>
-                            <Edit className="h-4 w-4" />
-                          </Button>
-                          <Button variant="outline" size="sm" onClick={() => handleDeleteContact(contact.id)}>
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </TableCell>
+              {contacts.length === 0 ? (
+                <div className="flex h-[200px] w-full items-center justify-center rounded-md border border-dashed text-muted-foreground">
+                  <div className="flex flex-col items-center gap-2 text-center">
+                    <Users className="h-8 w-8 text-muted-foreground" />
+                    <div className="text-sm text-muted-foreground">No contacts found.</div>
+                    <div className="text-xs">Add a new contact to get started.</div>
+                  </div>
+                </div>
+              ) : (
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Name</TableHead>
+                      <TableHead>Phone</TableHead>
+                      <TableHead>Email</TableHead>
+                      <TableHead>Groups</TableHead>
+                      <TableHead>Created</TableHead>
+                      <TableHead className="text-right">Actions</TableHead>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+                  </TableHeader>
+                  <TableBody>
+                    {contacts.map((contact) => (
+                      <TableRow key={contact.id}>
+                        <TableCell className="font-medium">
+                          {contact.firstName} {contact.lastName}
+                        </TableCell>
+                        <TableCell>{contact.phone}</TableCell>
+                        <TableCell>{contact.email}</TableCell>
+                        <TableCell>
+                          <div className="flex flex-wrap gap-1">
+                            {contact.groups.map((group) => (
+                              <Badge key={group} variant="outline" className="text-xs">
+                                {group}
+                              </Badge>
+                            ))}
+                          </div>
+                        </TableCell>
+                        <TableCell>{contact.createdAt}</TableCell>
+                        <TableCell className="text-right">
+                          <div className="flex justify-end space-x-2">
+                            <Button variant="outline" size="sm" onClick={() => handleEditContact(contact)}>
+                              <Edit className="h-4 w-4" />
+                            </Button>
+                            <Button variant="outline" size="sm" onClick={() => handleDeleteContact(contact.id)}>
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              )}
             </CardContent>
           </Card>
         </TabsContent>
@@ -566,37 +534,47 @@ export default function ContactsPage() {
 
           <Card>
             <CardContent className="p-0">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Group Name</TableHead>
-                    <TableHead>Description</TableHead>
-                    <TableHead>Contacts</TableHead>
-                    <TableHead>Created</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {groups.map((group) => (
-                    <TableRow key={group.id}>
-                      <TableCell className="font-medium">{group.name}</TableCell>
-                      <TableCell>{group.description}</TableCell>
-                      <TableCell>{group.contactCount}</TableCell>
-                      <TableCell>{group.createdAt}</TableCell>
-                      <TableCell className="text-right">
-                        <div className="flex justify-end space-x-2">
-                          <Button variant="outline" size="sm" onClick={() => handleEditGroup(group)}>
-                            <Edit className="h-4 w-4" />
-                          </Button>
-                          <Button variant="outline" size="sm" onClick={() => handleDeleteGroup(group.id)}>
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </TableCell>
+              {groups.length === 0 ? (
+                <div className="flex h-[200px] w-full items-center justify-center rounded-md border border-dashed text-muted-foreground">
+                  <div className="flex flex-col items-center gap-2 text-center">
+                    <Users className="h-8 w-8 text-muted-foreground" />
+                    <div className="text-sm text-muted-foreground">No groups found.</div>
+                    <div className="text-xs">Create a new group to organize your contacts.</div>
+                  </div>
+                </div>
+              ) : (
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Group Name</TableHead>
+                      <TableHead>Description</TableHead>
+                      <TableHead>Contacts</TableHead>
+                      <TableHead>Created</TableHead>
+                      <TableHead className="text-right">Actions</TableHead>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+                  </TableHeader>
+                  <TableBody>
+                    {groups.map((group) => (
+                      <TableRow key={group.id}>
+                        <TableCell className="font-medium">{group.name}</TableCell>
+                        <TableCell>{group.description}</TableCell>
+                        <TableCell>{group.contactCount}</TableCell>
+                        <TableCell>{group.createdAt}</TableCell>
+                        <TableCell className="text-right">
+                          <div className="flex justify-end space-x-2">
+                            <Button variant="outline" size="sm" onClick={() => handleEditGroup(group)}>
+                              <Edit className="h-4 w-4" />
+                            </Button>
+                            <Button variant="outline" size="sm" onClick={() => handleDeleteGroup(group.id)}>
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              )}
             </CardContent>
           </Card>
         </TabsContent>

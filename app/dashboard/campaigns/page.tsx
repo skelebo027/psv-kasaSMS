@@ -35,44 +35,7 @@ interface Campaign {
 }
 
 export default function CampaignsPage() {
-  const [campaigns, setCampaigns] = useState<Campaign[]>([
-    {
-      id: "1",
-      name: "Welcome Campaign",
-      type: "SMS",
-      status: "Active",
-      recipients: 1500,
-      sent: 1500,
-      delivered: 1485,
-      cost: 45.0,
-      createdDate: "2024-01-15",
-      message: "Welcome to our service! Get started today.",
-    },
-    {
-      id: "2",
-      name: "Holiday Promotion",
-      type: "Email",
-      status: "Completed",
-      recipients: 5000,
-      sent: 5000,
-      delivered: 4950,
-      cost: 600.0,
-      createdDate: "2024-02-20",
-      message: "Special holiday offers just for you!",
-    },
-    {
-      id: "3",
-      name: "Product Launch",
-      type: "WhatsApp",
-      status: "Draft",
-      recipients: 2500,
-      sent: 0,
-      delivered: 0,
-      cost: 1250.0,
-      createdDate: "2024-03-10",
-      message: "Exciting new product launch announcement!",
-    },
-  ])
+  const [campaigns, setCampaigns] = useState<Campaign[]>([]) // Initialize as empty
 
   const [isCreateOpen, setIsCreateOpen] = useState(false)
   const [isEditOpen, setIsEditOpen] = useState(false)
@@ -100,7 +63,7 @@ export default function CampaignsPage() {
       id: Date.now().toString(),
       name: formData.name,
       type: formData.type,
-      status: "Active",
+      status: "Active", // Default to active upon creation
       recipients: formData.recipients,
       sent: formData.recipients,
       delivered: Math.floor(formData.recipients * 0.98), // 98% delivery rate
@@ -157,10 +120,20 @@ export default function CampaignsPage() {
     setIsEditOpen(false)
     setSelectedCampaign(null)
     setFormData({ name: "", type: "SMS", recipients: 0, message: "" })
+
+    toast({
+      title: "Campaign Updated",
+      description: `Campaign "${formData.name}" has been updated`,
+    })
   }
 
   const handleDelete = (campaignId: string) => {
+    const campaignToDelete = campaigns.find((c) => c.id === campaignId)
     setCampaigns(campaigns.filter((campaign) => campaign.id !== campaignId))
+    toast({
+      title: "Campaign Deleted",
+      description: `Campaign "${campaignToDelete?.name}" has been deleted`,
+    })
   }
 
   const handleStatusChange = (campaignId: string, newStatus: string) => {
@@ -252,84 +225,94 @@ export default function CampaignsPage() {
           <CardDescription>Manage all your messaging campaigns</CardDescription>
         </CardHeader>
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Recipients</TableHead>
-                <TableHead>Delivered</TableHead>
-                <TableHead>Cost</TableHead>
-                <TableHead>Created</TableHead>
-                <TableHead className="w-[70px]">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {campaigns.map((campaign) => (
-                <TableRow key={campaign.id}>
-                  <TableCell className="font-medium">{campaign.name}</TableCell>
-                  <TableCell>
-                    <Badge variant="outline">{campaign.type}</Badge>
-                  </TableCell>
-                  <TableCell>
-                    <Badge
-                      variant={
-                        campaign.status === "Active"
-                          ? "default"
-                          : campaign.status === "Completed"
-                            ? "secondary"
-                            : "outline"
-                      }
-                    >
-                      {campaign.status}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>{campaign.recipients.toLocaleString()}</TableCell>
-                  <TableCell>{campaign.delivered.toLocaleString()}</TableCell>
-                  <TableCell>GH₵ {campaign.cost.toFixed(2)}</TableCell>
-                  <TableCell>{campaign.createdDate}</TableCell>
-                  <TableCell>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-8 p-0">
-                          <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={() => handleEdit(campaign)}>
-                          <Pencil className="mr-2 h-4 w-4" />
-                          Edit
-                        </DropdownMenuItem>
-                        {campaign.status === "Draft" && (
-                          <DropdownMenuItem onClick={() => handleStatusChange(campaign.id, "Active")}>
-                            <Send className="mr-2 h-4 w-4" />
-                            Launch
-                          </DropdownMenuItem>
-                        )}
-                        {campaign.status === "Active" && (
-                          <DropdownMenuItem onClick={() => handleStatusChange(campaign.id, "Paused")}>
-                            <Pause className="mr-2 h-4 w-4" />
-                            Pause
-                          </DropdownMenuItem>
-                        )}
-                        {campaign.status === "Paused" && (
-                          <DropdownMenuItem onClick={() => handleStatusChange(campaign.id, "Active")}>
-                            <Play className="mr-2 h-4 w-4" />
-                            Resume
-                          </DropdownMenuItem>
-                        )}
-                        <DropdownMenuItem onClick={() => handleDelete(campaign.id)} className="text-red-600">
-                          <Trash2 className="mr-2 h-4 w-4" />
-                          Delete
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
+          {campaigns.length === 0 ? (
+            <div className="flex h-[200px] w-full items-center justify-center rounded-md border border-dashed text-muted-foreground">
+              <div className="flex flex-col items-center gap-2 text-center">
+                <Send className="h-8 w-8 text-muted-foreground" />
+                <div className="text-sm text-muted-foreground">No campaigns found.</div>
+                <div className="text-xs">Create your first campaign to get started.</div>
+              </div>
+            </div>
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Type</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Recipients</TableHead>
+                  <TableHead>Delivered</TableHead>
+                  <TableHead>Cost</TableHead>
+                  <TableHead>Created</TableHead>
+                  <TableHead className="w-[70px]">Actions</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {campaigns.map((campaign) => (
+                  <TableRow key={campaign.id}>
+                    <TableCell className="font-medium">{campaign.name}</TableCell>
+                    <TableCell>
+                      <Badge variant="outline">{campaign.type}</Badge>
+                    </TableCell>
+                    <TableCell>
+                      <Badge
+                        variant={
+                          campaign.status === "Active"
+                            ? "default"
+                            : campaign.status === "Completed"
+                              ? "secondary"
+                              : "outline"
+                        }
+                      >
+                        {campaign.status}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>{campaign.recipients.toLocaleString()}</TableCell>
+                    <TableCell>{campaign.delivered.toLocaleString()}</TableCell>
+                    <TableCell>GH₵ {campaign.cost.toFixed(2)}</TableCell>
+                    <TableCell>{campaign.createdDate}</TableCell>
+                    <TableCell>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" className="h-8 w-8 p-0">
+                            <MoreHorizontal className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem onClick={() => handleEdit(campaign)}>
+                            <Pencil className="mr-2 h-4 w-4" />
+                            Edit
+                          </DropdownMenuItem>
+                          {campaign.status === "Draft" && (
+                            <DropdownMenuItem onClick={() => handleStatusChange(campaign.id, "Active")}>
+                              <Send className="mr-2 h-4 w-4" />
+                              Launch
+                            </DropdownMenuItem>
+                          )}
+                          {campaign.status === "Active" && (
+                            <DropdownMenuItem onClick={() => handleStatusChange(campaign.id, "Paused")}>
+                              <Pause className="mr-2 h-4 w-4" />
+                              Pause
+                            </DropdownMenuItem>
+                          )}
+                          {campaign.status === "Paused" && (
+                            <DropdownMenuItem onClick={() => handleStatusChange(campaign.id, "Active")}>
+                              <Play className="mr-2 h-4 w-4" />
+                              Resume
+                            </DropdownMenuItem>
+                          )}
+                          <DropdownMenuItem onClick={() => handleDelete(campaign.id)} className="text-red-600">
+                            <Trash2 className="mr-2 h-4 w-4" />
+                            Delete
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
         </CardContent>
       </Card>
 

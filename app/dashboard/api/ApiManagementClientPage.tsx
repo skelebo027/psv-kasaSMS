@@ -1,21 +1,62 @@
 "use client"
 
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { PlusCircle, Copy } from "lucide-react"
+import { PlusCircle, Copy, Trash2 } from "lucide-react"
 import { toast } from "@/components/ui/use-toast"
 
+interface ApiKey {
+  id: string
+  name: string
+  key: string
+  created: string
+  lastUsed: string
+}
+
 export default function ApiManagementClientPage() {
-  // In a real application, you would fetch API keys from a database
-  const apiKeys: { id: string; name: string; key: string; created: string; lastUsed: string }[] = []
+  const [apiKeys, setApiKeys] = useState<ApiKey[]>([])
+
+  const generateRandomKey = () => {
+    const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0987654321"
+    let result = ""
+    for (let i = 0; i < 32; i++) {
+      result += characters.charAt(Math.floor(Math.random() * characters.length))
+    }
+    return result
+  }
+
+  const handleGenerateKey = () => {
+    const newKey: ApiKey = {
+      id: Date.now().toString(),
+      name: `New API Key ${apiKeys.length + 1}`,
+      key: generateRandomKey(),
+      created: new Date().toLocaleDateString(),
+      lastUsed: "Never",
+    }
+    setApiKeys((prevKeys) => [...prevKeys, newKey])
+    toast({
+      title: "API Key Generated!",
+      description: `New API key "${newKey.name}" has been created.`,
+    })
+  }
 
   const handleCopy = (key: string) => {
     navigator.clipboard.writeText(key)
     toast({
       title: "API Key Copied!",
       description: "The API key has been copied to your clipboard.",
+    })
+  }
+
+  const handleRevoke = (id: string) => {
+    setApiKeys((prevKeys) => prevKeys.filter((key) => key.id !== id))
+    toast({
+      title: "API Key Revoked!",
+      description: "The API key has been successfully revoked.",
+      variant: "destructive",
     })
   }
 
@@ -32,7 +73,7 @@ export default function ApiManagementClientPage() {
             <CardTitle>Your API Keys</CardTitle>
             <CardDescription>Generate and manage API keys for programmatic access to KasaSMS.</CardDescription>
           </div>
-          <Button size="sm" className="h-8 gap-1">
+          <Button size="sm" className="h-8 gap-1" onClick={handleGenerateKey}>
             <PlusCircle className="h-3.5 w-3.5" />
             <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">Generate New Key</span>
           </Button>
@@ -68,8 +109,9 @@ export default function ApiManagementClientPage() {
                     <TableCell>{key.created}</TableCell>
                     <TableCell>{key.lastUsed}</TableCell>
                     <TableCell className="text-right">
-                      <Button variant="ghost" size="sm">
-                        Revoke
+                      <Button variant="ghost" size="sm" onClick={() => handleRevoke(key.id)}>
+                        <Trash2 className="h-4 w-4 text-red-500" />
+                        <span className="sr-only">Revoke</span>
                       </Button>
                     </TableCell>
                   </TableRow>

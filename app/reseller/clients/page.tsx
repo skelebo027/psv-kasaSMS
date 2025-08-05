@@ -37,78 +37,17 @@ import { ResellerNav } from "@/components/reseller-nav"
 export default function ClientsPage() {
   const [searchQuery, setSearchQuery] = useState("")
 
-  const clients = [
-    {
-      id: 1,
-      name: "TechSolutions Inc.",
-      email: "admin@techsolutions.com",
-      phone: "+233 123 456 789",
-      status: "Active",
-      plan: "Business",
-      revenue: "$1,250",
-      lastActive: "2 hours ago",
-    },
-    {
-      id: 2,
-      name: "Global Marketing Ltd.",
-      email: "info@globalmarketing.com",
-      phone: "+233 234 567 890",
-      status: "Active",
-      plan: "Enterprise",
-      revenue: "$2,890",
-      lastActive: "1 day ago",
-    },
-    {
-      id: 3,
-      name: "Retail Connect",
-      email: "support@retailconnect.com",
-      phone: "+233 345 678 901",
-      status: "Active",
-      plan: "Starter",
-      revenue: "$650",
-      lastActive: "3 days ago",
-    },
-    {
-      id: 4,
-      name: "Health Services",
-      email: "contact@healthservices.com",
-      phone: "+233 456 789 012",
-      status: "Inactive",
-      plan: "Business",
-      revenue: "$1,120",
-      lastActive: "2 weeks ago",
-    },
-    {
-      id: 5,
-      name: "Education First",
-      email: "info@educationfirst.com",
-      phone: "+233 567 890 123",
-      status: "Active",
-      plan: "Business",
-      revenue: "$780",
-      lastActive: "5 days ago",
-    },
-    {
-      id: 6,
-      name: "Financial Advisors",
-      email: "admin@financialadvisors.com",
-      phone: "+233 678 901 234",
-      status: "Active",
-      plan: "Enterprise",
-      revenue: "$3,450",
-      lastActive: "1 hour ago",
-    },
-    {
-      id: 7,
-      name: "Travel Agency",
-      email: "bookings@travelagency.com",
-      phone: "+233 789 012 345",
-      status: "Inactive",
-      plan: "Starter",
-      revenue: "$320",
-      lastActive: "1 month ago",
-    },
-  ]
+  // Initialize clients as an empty array
+  const clients: {
+    id: number
+    name: string
+    email: string
+    phone: string
+    status: string
+    plan: string
+    revenue: string
+    lastActive: string
+  }[] = []
 
   const filteredClients = clients.filter(
     (client) =>
@@ -219,85 +158,87 @@ export default function ClientsPage() {
                   </Button>
                 </div>
               </div>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Client</TableHead>
-                    <TableHead>Contact</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Plan</TableHead>
-                    <TableHead>Revenue</TableHead>
-                    <TableHead>Last Active</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {filteredClients.map((client) => (
-                    <TableRow key={client.id}>
-                      <TableCell className="font-medium">{client.name}</TableCell>
-                      <TableCell>
-                        <div className="flex flex-col">
-                          <span className="text-sm">{client.email}</span>
-                          <span className="text-xs text-muted-foreground">{client.phone}</span>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <span
-                          className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                            client.status === "Active" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
-                          }`}
-                        >
-                          {client.status}
-                        </span>
-                      </TableCell>
-                      <TableCell>{client.plan}</TableCell>
-                      <TableCell>{client.revenue}</TableCell>
-                      <TableCell>{client.lastActive}</TableCell>
-                      <TableCell className="text-right">
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className="h-8 w-8 p-0">
-                              <span className="sr-only">Open menu</span>
-                              <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuItem>
-                              <Users className="mr-2 h-4 w-4" />
-                              View Client
-                            </DropdownMenuItem>
-                            <DropdownMenuItem>
-                              <Edit className="mr-2 h-4 w-4" />
-                              Edit Details
-                            </DropdownMenuItem>
-                            <DropdownMenuItem>
-                              <MessageSquare className="mr-2 h-4 w-4" />
-                              Manage Services
-                            </DropdownMenuItem>
-                            <DropdownMenuItem>
-                              <CreditCard className="mr-2 h-4 w-4" />
-                              Billing History
-                            </DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem className="text-red-600">
-                              <Trash2 className="mr-2 h-4 w-4" />
-                              Delete Client
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-              {filteredClients.length === 0 && (
+              {filteredClients.length === 0 ? (
                 <div className="flex h-[200px] w-full items-center justify-center rounded-md border border-dashed">
                   <div className="flex flex-col items-center gap-2 text-center">
                     <Users className="h-8 w-8 text-muted-foreground" />
-                    <div className="text-sm text-muted-foreground">No clients found</div>
+                    <div className="text-sm text-muted-foreground">No clients found.</div>
+                    <div className="text-xs">Add your first client to get started.</div>
                   </div>
                 </div>
+              ) : (
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Client</TableHead>
+                      <TableHead>Contact</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead>Plan</TableHead>
+                      <TableHead>Revenue</TableHead>
+                      <TableHead>Last Active</TableHead>
+                      <TableHead className="text-right">Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredClients.map((client) => (
+                      <TableRow key={client.id}>
+                        <TableCell className="font-medium">{client.name}</TableCell>
+                        <TableCell>
+                          <div className="flex flex-col">
+                            <span className="text-sm">{client.email}</span>
+                            <span className="text-xs text-muted-foreground">{client.phone}</span>
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <span
+                            className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
+                              client.status === "Active" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+                            }`}
+                          >
+                            {client.status}
+                          </span>
+                        </TableCell>
+                        <TableCell>{client.plan}</TableCell>
+                        <TableCell>{client.revenue}</TableCell>
+                        <TableCell>{client.lastActive}</TableCell>
+                        <TableCell className="text-right">
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button variant="ghost" className="h-8 w-8 p-0">
+                                <span className="sr-only">Open menu</span>
+                                <MoreHorizontal className="h-4 w-4" />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                              <DropdownMenuItem>
+                                <Users className="mr-2 h-4 w-4" />
+                                View Client
+                              </DropdownMenuItem>
+                              <DropdownMenuItem>
+                                <Edit className="mr-2 h-4 w-4" />
+                                Edit Details
+                              </DropdownMenuItem>
+                              <DropdownMenuItem>
+                                <MessageSquare className="mr-2 h-4 w-4" />
+                                Manage Services
+                              </DropdownMenuItem>
+                              <DropdownMenuItem>
+                                <CreditCard className="mr-2 h-4 w-4" />
+                                Billing History
+                              </DropdownMenuItem>
+                              <DropdownMenuSeparator />
+                              <DropdownMenuItem className="text-red-600">
+                                <Trash2 className="mr-2 h-4 w-4" />
+                                Delete Client
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
               )}
             </CardContent>
             <CardFooter className="flex items-center justify-between">
@@ -311,7 +252,7 @@ export default function ClientsPage() {
                 <Button variant="outline" size="sm" className="bg-gray-100">
                   1
                 </Button>
-                <Button variant="outline" size="sm">
+                <Button variant="outline" size="sm" disabled>
                   Next
                 </Button>
               </div>
@@ -356,19 +297,19 @@ export default function ClientsPage() {
               <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">
                   <span>Total Revenue</span>
-                  <span className="font-medium">$10,460</span>
+                  <span className="font-medium">$0.00</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span>Average Revenue per Client</span>
-                  <span className="font-medium">$1,494</span>
+                  <span className="font-medium">$0.00</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span>Highest Revenue Client</span>
-                  <span className="font-medium">Financial Advisors</span>
+                  <span className="font-medium">N/A</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span>Your Commission</span>
-                  <span className="font-medium">$3,138</span>
+                  <span className="font-medium">$0.00</span>
                 </div>
               </CardContent>
             </Card>
@@ -381,11 +322,11 @@ export default function ClientsPage() {
                   <Plus className="mr-2 h-4 w-4" />
                   Add New Client
                 </Button>
-                <Button variant="outline" className="w-full">
+                <Button variant="outline" className="w-full bg-transparent">
                   <MessageSquare className="mr-2 h-4 w-4" />
                   Send Bulk Message
                 </Button>
-                <Button variant="outline" className="w-full">
+                <Button variant="outline" className="w-full bg-transparent">
                   <Download className="mr-2 h-4 w-4" />
                   Export Client List
                 </Button>
