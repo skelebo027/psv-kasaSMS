@@ -14,7 +14,7 @@ import {
   Cell,
   Legend,
 } from "recharts"
-import { CalendarIcon, BarChart3, FileText, DollarSign } from "lucide-react"
+import { CalendarIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
@@ -46,32 +46,32 @@ export function TaxOverview() {
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Total Tax Collected (YTD)</CardTitle>
-          <DollarSign className="h-4 w-4 text-muted-foreground" />
+          <CardTitle className="text-sm font-medium">Total Tax Collected</CardTitle>
+          <span className="text-muted-foreground text-sm">$0.00</span>
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">GH₵ 0.00</div>
-          <p className="text-xs text-muted-foreground">No tax collected this year</p>
+          <div className="text-2xl font-bold">$0.00</div>
+          <p className="text-xs text-muted-foreground">No tax collected yet.</p>
         </CardContent>
       </Card>
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Pending Tax Remittance</CardTitle>
-          <FileText className="h-4 w-4 text-muted-foreground" />
+          <CardTitle className="text-sm font-medium">Pending Remittances</CardTitle>
+          <span className="text-muted-foreground text-sm">$0.00</span>
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">GH₵ 0.00</div>
-          <p className="text-xs text-muted-foreground">No pending remittances</p>
+          <div className="text-2xl font-bold">$0.00</div>
+          <p className="text-xs text-muted-foreground">No pending tax remittances.</p>
         </CardContent>
       </Card>
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Tax Reports Generated</CardTitle>
-          <BarChart3 className="h-4 w-4 text-muted-foreground" />
+          <CardTitle className="text-sm font-medium">Last Filing Date</CardTitle>
+          <span className="text-muted-foreground text-sm">N/A</span>
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">0</div>
-          <p className="text-xs text-muted-foreground">No reports generated yet</p>
+          <div className="text-2xl font-bold">N/A</div>
+          <p className="text-xs text-muted-foreground">No tax filings recorded.</p>
         </CardContent>
       </Card>
       <Card className="col-span-2">
@@ -216,16 +216,11 @@ export function TaxOverview() {
 
       <Card className="col-span-full">
         <CardHeader>
-          <CardTitle>Tax Collection Summary</CardTitle>
-          <CardDescription>Overview of your tax collection activities.</CardDescription>
+          <CardTitle>Recent Tax Activity</CardTitle>
+          <CardDescription>No recent tax activity to display.</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="flex h-[200px] items-center justify-center rounded-md border border-dashed text-muted-foreground">
-            <div className="text-center">
-              <p className="text-sm font-medium">No tax data available</p>
-              <p className="text-xs">Tax collection data will appear here once transactions occur.</p>
-            </div>
-          </div>
+          <div className="text-center text-muted-foreground py-8">No recent tax activity.</div>
         </CardContent>
       </Card>
     </div>

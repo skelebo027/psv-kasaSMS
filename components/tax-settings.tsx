@@ -1,22 +1,20 @@
 "use client"
 
 import { Label } from "@/components/ui/label"
-
-import { useState } from "react"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import * as z from "zod"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Button } from "@/components/ui/button"
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Switch } from "@/components/ui/switch"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Separator } from "@/components/ui/separator"
 import { Badge } from "@/components/ui/badge"
 import { PlusCircle, Trash2 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
+import { z } from "zod"
+import { useForm, zodResolver } from "react-hook-form"
+import { useState } from "react"
 
 const generalFormSchema = z.object({
   companyName: z.string().min(2, {
@@ -165,34 +163,33 @@ export function TaxSettings() {
       <TabsContent value="general">
         <Card>
           <CardHeader>
-            <CardTitle>General Tax Settings</CardTitle>
-            <CardDescription>Configure how taxes are applied to your services.</CardDescription>
+            <CardTitle>Tax Configuration</CardTitle>
+            <CardDescription>Configure global tax rates and settings.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="tax-region">Primary Tax Region</Label>
-              <Select defaultValue="ghana">
-                <SelectTrigger id="tax-region">
-                  <SelectValue placeholder="Select region" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="ghana">Ghana</SelectItem>
-                  <SelectItem value="nigeria">Nigeria</SelectItem>
-                  <SelectItem value="kenya">Kenya</SelectItem>
-                </SelectContent>
-              </Select>
-              <p className="text-xs text-muted-foreground">This is the default region for tax calculations.</p>
+            <div className="flex items-center justify-between">
+              <div className="space-y-0.5">
+                <Label htmlFor="enable-tax">Enable Tax Calculation</Label>
+                <p className="text-sm text-muted-foreground">Automatically calculate taxes on transactions.</p>
+              </div>
+              <Switch
+                id="enable-tax"
+                checked={generalForm.getValues("autoCollect")}
+                onCheckedChange={(value) => generalForm.setValue("autoCollect", value)}
+              />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="tax-rate">Default Tax Rate (%)</Label>
-              <Input id="tax-rate" type="number" placeholder="e.g., 15" />
-              <p className="text-xs text-muted-foreground">
-                This rate will be applied to services unless overridden by specific rules.
-              </p>
+            <div className="grid gap-2">
+              <Label htmlFor="default-tax-rate">Default Tax Rate (%)</Label>
+              <Input
+                id="default-tax-rate"
+                type="number"
+                placeholder="0.00"
+                {...generalForm.register("defaultTaxRate")}
+              />
             </div>
-            <div className="flex items-center space-x-2">
-              <Switch id="enable-tax" />
-              <Label htmlFor="enable-tax">Enable Tax Collection</Label>
+            <div className="grid gap-2">
+              <Label htmlFor="tax-id">Tax ID / VAT Number</Label>
+              <Input id="tax-id" placeholder="Enter Tax ID" {...generalForm.register("taxId")} />
             </div>
             <Separator />
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
@@ -208,20 +205,6 @@ export function TaxSettings() {
                     <FormDescription>
                       The legal name of your company as registered with tax authorities.
                     </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={generalForm.control}
-                name="taxId"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Tax ID / VAT Number</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Enter tax ID" {...field} />
-                    </FormControl>
-                    <FormDescription>Your company's tax identification number.</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -272,12 +255,31 @@ export function TaxSettings() {
                   </FormItem>
                 )}
               />
+              <FormField
+                control={generalForm.control}
+                name="primaryTaxRegion"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Primary Tax Region</FormLabel>
+                    <Select defaultValue="ghana">
+                      <SelectTrigger id="tax-region">
+                        <SelectValue placeholder="Select region" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="ghana">Ghana</SelectItem>
+                        <SelectItem value="nigeria">Nigeria</SelectItem>
+                        <SelectItem value="kenya">Kenya</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormDescription>This is the default region for tax calculations.</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
-            <CardFooter>
-              <Button type="button" onClick={handleSaveSettings}>
-                Save Settings
-              </Button>
-            </CardFooter>
+            <Button type="button" onClick={generalForm.handleSubmit(onGeneralSubmit)}>
+              Save Settings
+            </Button>
           </CardContent>
         </Card>
       </TabsContent>
@@ -480,9 +482,7 @@ export function TaxSettings() {
               </div>
             </div>
           </CardContent>
-          <CardFooter>
-            <Button>Save Exemptions</Button>
-          </CardFooter>
+          <Button disabled>Save Exemptions</Button>
         </Card>
       </TabsContent>
     </Tabs>

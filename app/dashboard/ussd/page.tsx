@@ -1,157 +1,120 @@
-import type { Metadata } from "next"
-import Link from "next/link"
-import { PlusCircle, BarChart3, Hash, Settings } from "lucide-react"
-
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { USSDServicesList } from "@/components/ussd-services-list"
-import { USSDStatistics } from "@/components/ussd-statistics"
-
-export const metadata: Metadata = {
-  title: "USSD Services | KasaSMS",
-  description: "Create and manage USSD services for your customers",
-}
+import { Button } from "@/components/ui/button"
+import { PlusCircle, BarChart, Users, Code, Settings } from "lucide-react"
+import Link from "next/link"
 
 export default function USSDPage() {
   return (
-    <div className="flex flex-col gap-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">USSD Services</h1>
-          <p className="text-muted-foreground">Create and manage interactive USSD services for your customers</p>
-        </div>
-        <div className="flex items-center gap-2">
-          <Button asChild>
-            <Link href="/dashboard/ussd/create">
-              <PlusCircle className="mr-2 h-4 w-4" />
-              Create New Service
-            </Link>
-          </Button>
+    <div className="flex flex-col gap-4 p-4 md:gap-8 md:p-6">
+      <div className="flex items-center">
+        <h1 className="font-semibold text-lg md:text-2xl">USSD Management</h1>
+        <div className="ml-auto flex items-center gap-2">
+          <Link href="/dashboard/ussd/create">
+            <Button size="sm" className="h-8 gap-1">
+              <PlusCircle className="h-3.5 w-3.5" />
+              <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">Create New Service</span>
+            </Button>
+          </Link>
         </div>
       </div>
-
-      <Tabs defaultValue="services" className="space-y-4">
-        <TabsList>
-          <TabsTrigger value="services">Services</TabsTrigger>
-          <TabsTrigger value="analytics">Analytics</TabsTrigger>
-          <TabsTrigger value="shortcodes">Shortcodes</TabsTrigger>
-          <TabsTrigger value="settings">Settings</TabsTrigger>
-        </TabsList>
-        <TabsContent value="services" className="space-y-4">
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <Tabs defaultValue="overview" className="w-full">
+        <div className="flex items-center">
+          <TabsList>
+            <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="shortcodes">Shortcodes</TabsTrigger>
+            <TabsTrigger value="analytics">Analytics</TabsTrigger>
+            <TabsTrigger value="settings">Settings</TabsTrigger>
+          </TabsList>
+        </div>
+        <TabsContent value="overview">
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Active Services</CardTitle>
-                <div className="h-4 w-4 text-green-500 rounded-full bg-green-100 flex items-center justify-center">
-                  <span className="text-xs font-bold">5</span>
-                </div>
+                <CardTitle className="text-sm font-medium">Total Services</CardTitle>
+                <Code className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">5</div>
-                <p className="text-xs text-muted-foreground">+1 from last month</p>
+                <div className="text-2xl font-bold">0</div>
+                <p className="text-xs text-muted-foreground">No USSD services created yet.</p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Active Users</CardTitle>
+                <Users className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">0</div>
+                <p className="text-xs text-muted-foreground">No active users for USSD services.</p>
               </CardContent>
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Total Sessions</CardTitle>
-                <BarChart3 className="h-4 w-4 text-muted-foreground" />
+                <BarChart className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">12,234</div>
-                <p className="text-xs text-muted-foreground">+2.1% from last month</p>
+                <div className="text-2xl font-bold">0</div>
+                <p className="text-xs text-muted-foreground">No USSD sessions recorded.</p>
               </CardContent>
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Registered Shortcodes</CardTitle>
-                <Hash className="h-4 w-4 text-muted-foreground" />
+                <CardTitle className="text-sm font-medium">Average Session Duration</CardTitle>
+                <Settings className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">3</div>
-                <p className="text-xs text-muted-foreground">No change from last month</p>
+                <div className="text-2xl font-bold">0s</div>
+                <p className="text-xs text-muted-foreground">No data for average session duration.</p>
               </CardContent>
             </Card>
           </div>
-          <USSDServicesList />
+          <div className="mt-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Recent USSD Activity</CardTitle>
+                <CardDescription>No recent USSD activity to display.</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="text-center text-muted-foreground py-8">
+                  No recent activity. Create a new USSD service to get started.
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </TabsContent>
-        <TabsContent value="analytics" className="space-y-4">
+        <TabsContent value="shortcodes">
           <Card>
             <CardHeader>
-              <CardTitle>USSD Service Analytics</CardTitle>
-              <CardDescription>View detailed analytics for all your USSD services</CardDescription>
-            </CardHeader>
-            <CardContent className="pl-2">
-              <USSDStatistics />
-            </CardContent>
-            <CardFooter>
-              <Button asChild variant="outline" size="sm">
-                <Link href="/dashboard/ussd/analytics">View Detailed Analytics</Link>
-              </Button>
-            </CardFooter>
-          </Card>
-        </TabsContent>
-        <TabsContent value="shortcodes" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>USSD Shortcodes</CardTitle>
-              <CardDescription>Manage your registered USSD shortcodes</CardDescription>
+              <CardTitle>Managed Shortcodes</CardTitle>
+              <CardDescription>No shortcodes configured yet.</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                <div className="grid grid-cols-3 gap-4">
-                  <div className="rounded-lg border p-3">
-                    <div className="font-semibold">*123#</div>
-                    <div className="text-sm text-muted-foreground">Main Banking Service</div>
-                  </div>
-                  <div className="rounded-lg border p-3">
-                    <div className="font-semibold">*456#</div>
-                    <div className="text-sm text-muted-foreground">Customer Support</div>
-                  </div>
-                  <div className="rounded-lg border p-3">
-                    <div className="font-semibold">*789#</div>
-                    <div className="text-sm text-muted-foreground">Product Catalog</div>
-                  </div>
-                </div>
-              </div>
+              <div className="text-center text-muted-foreground py-8">No shortcodes found.</div>
             </CardContent>
-            <CardFooter>
-              <Button asChild variant="outline" size="sm">
-                <Link href="/dashboard/ussd/shortcodes">Manage Shortcodes</Link>
-              </Button>
-            </CardFooter>
           </Card>
         </TabsContent>
-        <TabsContent value="settings" className="space-y-4">
+        <TabsContent value="analytics">
           <Card>
             <CardHeader>
-              <CardTitle>USSD Platform Settings</CardTitle>
-              <CardDescription>Configure global settings for your USSD platform</CardDescription>
+              <CardTitle>USSD Analytics</CardTitle>
+              <CardDescription>No analytics data available.</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                <div className="grid gap-2">
-                  <div className="font-medium">Default Language</div>
-                  <div className="text-sm text-muted-foreground">English (Default)</div>
-                </div>
-                <div className="grid gap-2">
-                  <div className="font-medium">Session Timeout</div>
-                  <div className="text-sm text-muted-foreground">120 seconds</div>
-                </div>
-                <div className="grid gap-2">
-                  <div className="font-medium">Max Menu Items</div>
-                  <div className="text-sm text-muted-foreground">9 items</div>
-                </div>
-              </div>
+              <div className="text-center text-muted-foreground py-8">No analytics data to display.</div>
             </CardContent>
-            <CardFooter>
-              <Button asChild variant="outline" size="sm">
-                <Link href="/dashboard/ussd/settings">
-                  <Settings className="mr-2 h-4 w-4" />
-                  Edit Settings
-                </Link>
-              </Button>
-            </CardFooter>
+          </Card>
+        </TabsContent>
+        <TabsContent value="settings">
+          <Card>
+            <CardHeader>
+              <CardTitle>USSD Settings</CardTitle>
+              <CardDescription>Configure global USSD settings.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="text-center text-muted-foreground py-8">No settings configured.</div>
+            </CardContent>
           </Card>
         </TabsContent>
       </Tabs>

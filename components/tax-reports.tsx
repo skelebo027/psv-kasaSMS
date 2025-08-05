@@ -1,8 +1,8 @@
 "use client"
 
-import { CardFooter } from "@/components/ui/card"
-
 import { useState } from "react"
+
+import { CardFooter } from "@/components/ui/card"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Button } from "@/components/ui/button"
@@ -201,48 +201,18 @@ export function TaxReports() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Generated Reports</CardTitle>
-          <CardDescription>View and download your past tax reports.</CardDescription>
+          <CardTitle>Tax Reports</CardTitle>
+          <CardDescription>Generate and download tax reports for various periods.</CardDescription>
         </CardHeader>
-        <CardContent>
-          {taxReports.length === 0 ? (
-            <div className="flex h-[200px] items-center justify-center rounded-md border border-dashed text-muted-foreground">
-              <div className="text-center">
-                <FileText className="h-8 w-8 text-muted-foreground" />
-                <div className="text-sm text-muted-foreground">No reports generated yet.</div>
-                <div className="text-xs">Generate a report above to see it here.</div>
-              </div>
-            </div>
-          ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Date</TableHead>
-                  <TableHead>Period</TableHead>
-                  <TableHead>Type</TableHead>
-                  <TableHead>Amount</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {taxReports.map((report, index) => (
-                  <TableRow key={index}>
-                    <TableCell>{report.date}</TableCell>
-                    <TableCell>{report.period}</TableCell>
-                    <TableCell>{report.type}</TableCell>
-                    <TableCell className="font-medium">GH₵ {report.amount.toFixed(2)}</TableCell>
-                    <TableCell>{report.status}</TableCell>
-                    <TableCell className="text-right">
-                      <Button variant="ghost" size="sm">
-                        <Download className="h-4 w-4" />
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          )}
+        <CardContent className="space-y-4">
+          <div className="flex items-center justify-between">
+            <p className="text-muted-foreground">No reports generated yet.</p>
+            <Button variant="outline" disabled>
+              <Download className="h-4 w-4 mr-2" />
+              Generate Report
+            </Button>
+          </div>
+          <div className="text-center text-muted-foreground py-8">No tax reports to display.</div>
         </CardContent>
       </Card>
 
